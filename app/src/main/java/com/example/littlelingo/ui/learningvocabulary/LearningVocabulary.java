@@ -30,7 +30,7 @@ public class LearningVocabulary extends Fragment {
         // Initialize Firebase Database reference
         mDatabase = FirebaseDatabase.getInstance().getReference();
         // Add words to the database
-        addWords();
+//        addWords();
     }
 
 

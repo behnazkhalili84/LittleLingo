@@ -1,20 +1,19 @@
 package com.example.littlelingo.ui.vocabularyquiz;
-
 public class VocabularyQuestion {
     public int id;
     public String image;
     public String optionOne;
     public String optionTwo;
-    public String getOptionThree;
+    public String optionThree;
     public String optionFour;
     public String correctAnswer;
 
-    public VocabularyQuestion(int id, String image, String optionOne, String optionTwo, String getOptionThree, String optionFour, String correctAnswer) {
+    public VocabularyQuestion(int id, String image, String optionOne, String optionTwo, String optionThree, String optionFour, String correctAnswer) {
         this.id = id;
         this.image = image;
         this.optionOne = optionOne;
         this.optionTwo = optionTwo;
-        this.getOptionThree = getOptionThree;
+        this.optionThree = optionThree;
         this.optionFour = optionFour;
         this.correctAnswer = correctAnswer;
     }
@@ -29,8 +28,6 @@ public class VocabularyQuestion {
     public void setId(int id) {
         this.id = id;
     }
-
-
 
     public String getImage() {
         return image;
@@ -56,12 +53,12 @@ public class VocabularyQuestion {
         this.optionTwo = optionTwo;
     }
 
-    public String getGetOptionThree() {
-        return getOptionThree;
+    public String getOptionThree() {
+        return optionThree; // Fix the getter method name
     }
 
-    public void setGetOptionThree(String getOptionThree) {
-        this.getOptionThree = getOptionThree;
+    public void setOptionThree(String optionThree) { // Fix the setter method name
+        this.optionThree = optionThree;
     }
 
     public String getOptionFour() {

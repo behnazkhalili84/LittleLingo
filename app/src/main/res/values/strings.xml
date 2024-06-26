@@ -1,9 +1,9 @@
 <resources>
-    <string name="app_name">LittleLingo</string>
+    <string name="app_name">EnglishTraining</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_title">LittleLingo</string>
+    <string name="nav_header_subtitle">English learning Application</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
@@ -12,8 +12,37 @@
     <string name="menu_slideshow">Slideshow</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="leaning_grammar">Leaning Grammar</string>
     <string name="learning_vocabulary">Learning Vocabulary</string>
+<<<<<<< HEAD
     <string name="image">image</string>
     <string name="play_audio">Play Audio</string>
     <string name="next">Next</string>
+=======
+    <string name="vocabulary_quiz">Vocabulary Quiz</string>
+    <string name="grammar_quiz">Grammar Quiz</string>
+    <string name="lesson1">Lesson 1</string>
+    <string name="second_page_items">Lesson2</string>
+    <string name="image">image</string>
+    <string name="play_audio">play_audio</string>
+    <string name="submit">SUBMIT</string>
+    <string name="result">Result</string>
+    <string name="imageResult">image</string>
+    <string name="hey_congratulations">Hey, Congratulations!</string>
+    <string name="finish">FINISH</string>
+    <string name="next">NEXT</string>
+
+    <string name="play_audio1">Play Audio</string>
+
+    <string name="profile">Profile</string>
+    <string name="vocabulary_report">Vocabulary Report</string>
+    <string name="profile_image">profile_image</string>
+    <string name="SignOut">Sign Out</string>
+    <string name="learning_alphabet">Learning Alphabet</string>
+    <string name="quiz_report">Quiz Report</string>
+    <string name="videos">Videos</string>
+    <string name="littlelingo">LittleLingo</string>
+    <string name="littlelingo1">LittleLingo</string>
+
+>>>>>>> d6c38f10678327a61eb2a005ac638a590bca94ac
 </resources>

@@ -58,7 +58,7 @@ public class LearningVocabulary extends Fragment {
         viewModel.loadWord("grammar"); // Load grammar words
 
         // Add words to the database
-//        addWords();
+//       addWords();
     }
 
     public View onCreateView (@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

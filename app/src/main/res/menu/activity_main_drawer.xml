@@ -13,6 +13,11 @@
                 android:icon="@drawable/ic_menu_slideshow"
                 android:title="@string/learning_vocabulary"/>
         <item
+            android:id="@+id/nav_vocabulayquiz"
+            android:icon="@drawable/quiz_24"
+            android:title="@string/vocabulary_quiz"/>
+
+        <item
                 android:id="@+id/nav_slideshow"
                 android:icon="@drawable/ic_menu_slideshow"
                 android:title="@string/menu_slideshow"/>

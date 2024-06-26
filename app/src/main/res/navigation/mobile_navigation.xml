@@ -16,6 +16,16 @@
             android:name="com.example.littlelingo.ui.learningvocabulary.LearningVocabulary"
             android:label="@string/menu_gallery"
             tools:layout="@layout/fragment_learning_vocabulary"/>
+    <fragment
+        android:id="@+id/nav_vocabulayquiz"
+        android:name="com.example.littlelingo.ui.vocabularyquiz.VocabularyQuiz"
+        android:label="Vocabulary Quiz"
+        tools:layout="@layout/fragment_vocabulary_quiz">
+<!--        <action-->
+<!--            android:id="@+id/action_vocabularyQuiz_to_resultVocabulary"-->
+<!--            app:destination="@id/nav_vocabularyresult" />-->
+
+    </fragment>
 
     <fragment
             android:id="@+id/nav_slideshow"

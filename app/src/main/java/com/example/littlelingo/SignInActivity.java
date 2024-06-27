@@ -36,7 +36,7 @@ public class SignInActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sign_in);
 
         authViewModel = new ViewModelProvider(this).get(AuthViewModel.class);
-//authViewModel.signOut();
+authViewModel.signOut();
 
         userNameEditText = findViewById(R.id.UserName);
         passwordEditText = findViewById(R.id.password);

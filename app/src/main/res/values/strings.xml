@@ -14,11 +14,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="leaning_grammar">Leaning Grammar</string>
     <string name="learning_vocabulary">Learning Vocabulary</string>
-<<<<<<< HEAD
-    <string name="image">image</string>
-    <string name="play_audio">Play Audio</string>
-    <string name="next">Next</string>
-=======
+
     <string name="vocabulary_quiz">Vocabulary Quiz</string>
     <string name="grammar_quiz">Grammar Quiz</string>
     <string name="lesson1">Lesson 1</string>

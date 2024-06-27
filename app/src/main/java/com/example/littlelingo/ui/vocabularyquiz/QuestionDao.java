@@ -11,7 +11,7 @@ public class QuestionDao {
         ///Question1
         VocabularyQuestion vocabularyQuestion1 = new VocabularyQuestion(1,"gs://littlelingo-6bcce.appspot.com/apple.jpeg",
                 "drink", "water",
-                "apple", "nose", "3");
+                "apple", "nose", "3","vocabulary");
 
         // Add the word to the database
         mDatabase.child("word").child("1").setValue(vocabularyQuestion1);
@@ -20,7 +20,7 @@ public class QuestionDao {
 
         VocabularyQuestion vocabularyQuestion2 = new VocabularyQuestion(2,"gs://littlelingo-6bcce.appspot.com/water.jpeg",
                 "juice", "water",
-                "apple", "nose", "2");
+                "apple", "nose", "2","vocabulary");
 
         // Add the word to the database
         mDatabase.child("word").child("2").setValue(vocabularyQuestion2);
@@ -28,7 +28,7 @@ public class QuestionDao {
         ///Question3
         VocabularyQuestion vocabularyQuestion3 = new VocabularyQuestion(3,"gs://littlelingo-6bcce.appspot.com/juice.jpeg",
                 "juice", "water",
-                "apple", "nose", "1");
+                "apple", "nose", "1","vocabulary");
 
         // Add the word to the database
         mDatabase.child("word").child("3").setValue(vocabularyQuestion3);
@@ -37,7 +37,7 @@ public class QuestionDao {
 
         VocabularyQuestion vocabularyQuestion4 = new VocabularyQuestion(4,"gs://littlelingo-6bcce.appspot.com/drink.ogg",
                 "juice", "water",
-                "drink", "nose", "3");
+                "drink", "nose", "3","vocabulary");
 
         // Add the word to the database
         mDatabase.child("word").child("4").setValue(vocabularyQuestion4);
@@ -45,7 +45,7 @@ public class QuestionDao {
         ///Question5
         VocabularyQuestion vocabularyQuestion5 = new VocabularyQuestion(5,"gs://littlelingo-6bcce.appspot.com/toes.jpeg",
                 "Toes", "water",
-                "drink", "nose", "1");
+                "drink", "nose", "1","vocabulary");
 
         // Add the word to the database
         mDatabase.child("word").child("5").setValue(vocabularyQuestion5);
@@ -54,7 +54,7 @@ public class QuestionDao {
 
         VocabularyQuestion vocabularyQuestion6 = new VocabularyQuestion(6,"gs://littlelingo-6bcce.appspot.com/nose.jpg",
                 "Noes", "Toes",
-                "water", "drink", "1");
+                "water", "drink", "1","vocabulary");
 
         // Add the word to the database
         mDatabase.child("word").child("6").setValue(vocabularyQuestion6);

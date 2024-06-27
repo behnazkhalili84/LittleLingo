@@ -8,7 +8,9 @@ public class VocabularyQuestion {
     public String optionFour;
     public String correctAnswer;
 
-    public VocabularyQuestion(int id, String image, String optionOne, String optionTwo, String optionThree, String optionFour, String correctAnswer) {
+    public String questionType;
+
+    public VocabularyQuestion(int id, String image, String optionOne, String optionTwo, String optionThree, String optionFour, String correctAnswer, String questionType) {
         this.id = id;
         this.image = image;
         this.optionOne = optionOne;
@@ -16,6 +18,7 @@ public class VocabularyQuestion {
         this.optionThree = optionThree;
         this.optionFour = optionFour;
         this.correctAnswer = correctAnswer;
+        this.questionType = questionType;
     }
 
     public VocabularyQuestion() {
@@ -54,10 +57,10 @@ public class VocabularyQuestion {
     }
 
     public String getOptionThree() {
-        return optionThree; // Fix the getter method name
+        return optionThree;
     }
 
-    public void setOptionThree(String optionThree) { // Fix the setter method name
+    public void setOptionThree(String optionThree) {
         this.optionThree = optionThree;
     }
 
@@ -76,4 +79,13 @@ public class VocabularyQuestion {
     public void setCorrectAnswer(String correctAnswer) {
         this.correctAnswer = correctAnswer;
     }
+
+    public String getQuestionType() {
+        return questionType;
+    }
+
+    public void setQuestionType(String questionType) {
+        this.questionType = questionType;
+    }
 }
+

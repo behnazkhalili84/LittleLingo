@@ -10,12 +10,14 @@ public class AuthRepository {
     private FirebaseAuth firebaseAuth;
     private MutableLiveData<FirebaseUser> userLiveData;
     private MutableLiveData<Boolean> loggedOutLiveData;
+    private String authError ;
 
     //Constructor
     public AuthRepository() {
         firebaseAuth = FirebaseAuth.getInstance();
         userLiveData = new MutableLiveData<>();
         loggedOutLiveData = new MutableLiveData<>();
+        authError = "";
 
         if (firebaseAuth.getCurrentUser() != null) {
             userLiveData.postValue(firebaseAuth.getCurrentUser());
@@ -39,6 +41,7 @@ public class AuthRepository {
             if(task.isSuccessful()) {
                 userLiveData.postValue(firebaseAuth.getCurrentUser());
             } else {
+                authError = task.getException().getMessage();
                 userLiveData.postValue(null);
             }
 
@@ -57,5 +60,8 @@ public class AuthRepository {
 
     public LiveData<Boolean> getLoggedOutLiveData(){
         return loggedOutLiveData;
+    }
+    public String getAuthError() {
+        return authError;
     }
 }

@@ -1,10 +1,21 @@
 package com.example.littlelingo;
 
+import static androidx.fragment.app.FragmentManager.TAG;
+
+import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
+import android.widget.Toast;
+
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
+
+import androidx.annotation.NonNull;
+import androidx.core.view.GravityCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -12,6 +23,7 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.littlelingo.databinding.ActivityMainBinding;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -35,6 +47,28 @@ public class MainActivity extends AppCompatActivity {
         });
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
+        Toast.makeText(MainActivity.this,"Before listener", Toast.LENGTH_SHORT).show();
+
+//        //for sign out
+//        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+//            @Override
+//            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+//                int id = item.getItemId();
+//                Toast.makeText(MainActivity.this,"Fail : "+id, Toast.LENGTH_SHORT).show();
+//                if (id == R.id.sign_out) {
+//                    FirebaseAuth.getInstance().signOut();
+//                    Intent intent = new Intent(MainActivity.this, SignInActivity.class);
+//                    startActivity(intent);
+//                    finish(); // Close the current activity
+//                    return true;
+//                }
+//
+//                drawer.closeDrawer(GravityCompat.START);
+//                return false;
+//            }
+//        });
+//        Toast.makeText(MainActivity.this,"After", Toast.LENGTH_SHORT).show();
+
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
@@ -44,6 +78,27 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+
+        //for sign out
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int id = item.getItemId();
+                Toast.makeText(MainActivity.this,"Fail : "+id, Toast.LENGTH_SHORT).show();
+                if (id == R.id.sign_out) {
+                    FirebaseAuth.getInstance().signOut();
+                    Intent intent = new Intent(MainActivity.this, SignInActivity.class);
+                    startActivity(intent);
+                    finish(); // Close the current activity
+                    return true;
+                }
+
+                drawer.closeDrawer(GravityCompat.START);
+                return false;
+            }
+        });
+        Toast.makeText(MainActivity.this,"After", Toast.LENGTH_SHORT).show();
+
     }
 
     @Override
@@ -59,4 +114,5 @@ public class MainActivity extends AppCompatActivity {
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
     }
+
 }

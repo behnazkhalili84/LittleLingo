@@ -1,10 +1,12 @@
 package com.example.littlelingo.ui.learningvocabulary;
 
-import androidx.annotation.NonNull;
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.littlelingo.ui.vocabularyquiz.VocabularyQuestion;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -15,14 +17,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class VocabularyViewModel extends ViewModel {
+    private static final String TAG = "LearningVocabulary";
+
     private DatabaseReference mDatabase;
-    private final MutableLiveData<List<Word>> vocabularyList = new MutableLiveData<>();
-    private final MutableLiveData<List<Word>> grammarList = new MutableLiveData<>();
-    private final MutableLiveData<String> error = new MutableLiveData<>();
+    private  MutableLiveData<List<Word>> vocabularyList = new MutableLiveData<>();
+    private  MutableLiveData<List<Word>> grammarList = new MutableLiveData<>();
+    private  MutableLiveData<String> error = new MutableLiveData<>();
+    private MutableLiveData<Integer> currentPosition = new MutableLiveData<>(1);
 
     public VocabularyViewModel(DatabaseReference databaseReference) {
+
         this.mDatabase = databaseReference;
-    }
+        loadWord("Vocab"); // Load vocabulary words
+        loadWord("Grammar"); // Load grammar words
+        }
+
+
 
     public LiveData<List<Word>> getVocabularyList() {
         return vocabularyList;
@@ -35,43 +45,42 @@ public class VocabularyViewModel extends ViewModel {
          return error;
      }
 
-    void loadWord(String vocab) {
+    public LiveData<Integer> getCurrentPosition() {return currentPosition; }
 
-        mDatabase.child("word").addListenerForSingleValueEvent(new ValueEventListener() {
+    void loadWord(String type) { // Load vocabulary and grammar words if wordType is "vocab" or "vocab")
+        Log.d(TAG, "Loading words from Firebase for type: " + type);
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("word");
+
+        databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                List<Word>  vocabularyWords = new ArrayList<>();
-                List<Word>  grammarWords = new ArrayList<>();
+            public void onDataChange(DataSnapshot snapshot) {
+                List<Word> vocabularyWords = new ArrayList<>();
+                List<Word> grammarWords = new ArrayList<>();
 
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                     Word word = snapshot.getValue(Word.class);
-                    if(word != null) {
-                        if(word.getWordType().equals("vocab")) {
+                for (DataSnapshot wordSnapshot : snapshot.getChildren()) {
+                    Word word = wordSnapshot.getValue(Word.class);
+                    if (word != null) {
+                        if ("Vocab".equals(word.getWordType())) {
                             vocabularyWords.add(word);
-                        } else {
+                        } else if ("Grammar".equals(word.getWordType())) {
                             grammarWords.add(word);
                         }
                     }
                 }
-                // Set LiveData based on wordType
-                if (!vocabularyWords.isEmpty()) {
-                    vocabularyList.setValue(vocabularyWords);
-                }
+                // Update LiveData with fetched data
+                vocabularyList.setValue(vocabularyWords);
+                grammarList.setValue(grammarWords);
 
-                if (!grammarWords.isEmpty()) {
-                    grammarList.setValue(grammarWords);
-                }
+                Log.d(TAG, "Words loaded successfully. Vocabulary Count: " + vocabularyWords.size()
+                        + ", Grammar Count: " + grammarWords.size());
             }
 
 
-            @Override
             public void onCancelled(DatabaseError databaseError) {
                 // Handle error
-                error.setValue("Failed to load words");
+                error.setValue("Failed to load words: " + databaseError.getMessage());
+                Log.e(TAG, "Failed to load words: " + databaseError.getMessage());
             }
-
         });
     }
-
-
 }

@@ -1,5 +1,8 @@
 package com.example.littlelingo.ui.learningvocabulary;
 
+import static android.content.ContentValues.TAG;
+
+import android.annotation.SuppressLint;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -9,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,24 +26,24 @@ import com.example.littlelingo.R;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 
 public class LearningVocabulary extends Fragment {
+    private static final String TAG = "LearningVocabularyViewModel";
     private VocabularyViewModel viewModel;
     private ViewModelProvider.Factory viewModelFactory;
 
     private DatabaseReference mDatabase;
 
-    private ImageView ivImage ;
-            private ProgressBar progressBar;
-            private TextView tvProgress;
-            private TextView tvWordname;
-            private TextView tvexampleSentence;
-            private MaterialButton btnPlayAudio;
-            private Button btnNext;
+     ImageView ivImage ;
+             ProgressBar progressBar;
+             TextView tvProgress,tvWordname,tvexampleSentence;
+             MaterialButton btnPlayAudio;
+            private Button btnNext,btnBack;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -50,12 +54,15 @@ public class LearningVocabulary extends Fragment {
         viewModelFactory = new ViewModelFactory(databaseReference);
         viewModel = new ViewModelProvider(this, viewModelFactory).get(VocabularyViewModel.class);
 
-        // Initialize Firebase Database reference
-        mDatabase = FirebaseDatabase.getInstance().getReference();
+
+
 
         // Load vocabulary and grammar words
-        viewModel.loadWord("vocab"); // Load vocabulary words
-        viewModel.loadWord("grammar"); // Load grammar words
+        viewModel.loadWord("Vocab"); // Load vocabulary words
+       // viewModel.loadWord("grammar"); // Load grammar words
+
+        // Initialize Firebase Database reference
+        mDatabase = FirebaseDatabase.getInstance().getReference();
 
         // Add words to the database
 //       addWords();
@@ -63,9 +70,18 @@ public class LearningVocabulary extends Fragment {
 
     public View onCreateView (@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_learning_vocabulary, container, false);
+       return inflater.inflate(R.layout.fragment_learning_vocabulary, container, false);
 
-        // Initialize views here
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        setupUI(view);
+    }
+
+    private void setupUI(View view) {
         ivImage = view.findViewById(R.id.iv_image);
         progressBar = view.findViewById(R.id.progressBar);
         tvProgress = view.findViewById(R.id.tv_progress);
@@ -73,64 +89,78 @@ public class LearningVocabulary extends Fragment {
         tvexampleSentence = view.findViewById(R.id.tv_exampleSentence);
         btnPlayAudio = view.findViewById(R.id.btn_play_audio);
         btnNext = view.findViewById(R.id.btn_next);
+        Button btnBack = view.findViewById(R.id.btn_back);
 
-return view;
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        // Setup UI or start observing LiveData here
-        setupUI();
-
-    }
-
-    private void setupUI() {
+        // Observe vocabularyList LiveData from ViewModel
         viewModel.getVocabularyList().observe(getViewLifecycleOwner(), vocabularyList -> {
-
+            Log.d(TAG, "Received vocabulary list with size: " + vocabularyList.size());
             if (vocabularyList != null && !vocabularyList.isEmpty()) {
-                // Assuming wordID is zero-indexed in the list
-                AtomicInteger currentWordIndex = new AtomicInteger(1);
+                // Initialize with the first word
+                AtomicInteger currentWordIndex = new AtomicInteger(0);
                 Word currentWord = vocabularyList.get(currentWordIndex.get());
 
-                // Update UI components with the first word
+                // Update UI with initial word
                 updateUI(currentWord);
 
-                // Update progress indicators
-                progressBar.setMax(vocabularyList.size());
-                progressBar.setProgress(currentWordIndex.get() + 1);
-                tvProgress.setText((currentWordIndex.get() + 1) + "/" + vocabularyList.size());
-
-                // Handle button clicks or navigation to next word
+                // Setup Next button click listener
                 btnNext.setOnClickListener(v -> {
-                    currentWordIndex.getAndIncrement();
+                    currentWordIndex.incrementAndGet();
 
-                    // Check if index is within bounds
                     if (currentWordIndex.get() < vocabularyList.size()) {
-                        Word nextWord = vocabularyList.get(currentWordIndex.get());// Move to next word
+                        // Load next word
+                        Word nextWord = vocabularyList.get(currentWordIndex.get());
                         updateUI(nextWord);
 
                         // Update progress
                         progressBar.setProgress(currentWordIndex.get() + 1);
                         tvProgress.setText((currentWordIndex.get() + 1) + "/" + vocabularyList.size());
                     } else {
-                        // Handle end of list, if needed
+                        // Handle end of list
                         Toast.makeText(getContext(), "End of vocabulary list", Toast.LENGTH_SHORT).show();
                     }
                 });
+
+           btnBack.setOnClickListener(v -> {
+                currentWordIndex.decrementAndGet();
+                if (currentWordIndex.get() >= 0) {
+                    // Load previous word
+                    Word previousWord = vocabularyList.get(currentWordIndex.get());
+                    updateUI(previousWord);
+                    // Update progress
+                    progressBar.setProgress(currentWordIndex.get() +1);
+                    tvProgress.setText((currentWordIndex.get() + 1) + "/" + vocabularyList.size());
+                } else {
+                    // Handle end of list
+                    Toast.makeText(getContext(), "Beginning of vocabulary list", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+                // Set progress bar max and initial progress
+                progressBar.setMax(vocabularyList.size());
+                progressBar.setProgress(currentWordIndex.get() + 1);
+                tvProgress.setText((currentWordIndex.get() + 1) + "/" + vocabularyList.size());
+
+                // Play audio
+//                btnPlayAudio.setOnClickListener(v -> {
+//                    // Play audio
+//                    viewModel.playAudio(currentWord.getWordAudio());
+//                });
             }
         });
     }
-
     private void updateUI(Word word) {
+        Picasso.get().load(word.getImage()).into(ivImage);
         // Update UI components with data from Word object
-        ivImage.setImageURI(Uri.parse(word.getWordImage()));
         tvWordname.setText(word.getWordName());
         tvexampleSentence.setText(word.getExampleSentences());
 
-        // You can update other UI components (image, audio, etc.) here as well
+//        btnPlayAudio.setOnClickListener(v -> {
+//            // Play audio
+//            viewModel.playAudio(word.getWordAudio());
+//        })
+
     }
+
     private void addWords () {
                 {
 
@@ -250,6 +280,12 @@ return view;
                 }
 
             }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        // Clean up listeners or resources here if needed
+    }
         }
 
 

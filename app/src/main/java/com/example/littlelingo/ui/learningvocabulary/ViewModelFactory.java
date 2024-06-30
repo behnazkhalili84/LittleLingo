@@ -17,9 +17,9 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
         if (modelClass.isAssignableFrom(VocabularyViewModel.class)) {
+            // Pass mDatabase to the VocabularyViewModel constructor
             return (T) new VocabularyViewModel(mDatabase);
         }
         throw new IllegalArgumentException("Unknown ViewModel class");
     }
 }
-

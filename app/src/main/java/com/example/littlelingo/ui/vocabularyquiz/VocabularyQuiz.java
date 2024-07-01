@@ -2,6 +2,8 @@ package com.example.littlelingo.ui.vocabularyquiz;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+
+import java.util.Collections;
 import java.util.Random;
 import java.util.Set;
 import java.util.HashSet;
@@ -152,6 +154,7 @@ public class VocabularyQuiz extends Fragment {
     private void loadNextQuestion() {
         resetSelectedOption();
         VocabularyQuestion nextQuestion = questionsList.get(currentQuestionIndex);
+        shuffleOptions(nextQuestion);
         tvQuestion.setText("What is it?");
         Picasso.get().load(nextQuestion.getImage()).into(ivImage);
         tvOptionOne.setText(nextQuestion.getOptionOne());
@@ -161,7 +164,18 @@ public class VocabularyQuiz extends Fragment {
         tvProgress.setText((currentQuestionIndex + 1) + "/" + questionsList.size());
         progressBar.setProgress((currentQuestionIndex + 1) * 100 / questionsList.size());
     }
-
+    private void shuffleOptions(VocabularyQuestion question) {
+        List<String> options = new ArrayList<>();
+        options.add(question.getOptionOne());
+        options.add(question.getOptionTwo());
+        options.add(question.getOptionThree());
+        options.add(question.getOptionFour());
+        Collections.shuffle(options);
+        question.setOptionOne(options.get(0));
+        question.setOptionTwo(options.get(1));
+        question.setOptionThree(options.get(2));
+        question.setOptionFour(options.get(3));
+    }
     private void resetSelectedOption() {
         selectedOptionPosition = 0;
         tvOptionOne.setBackgroundResource(R.drawable.default_option_border_bg);

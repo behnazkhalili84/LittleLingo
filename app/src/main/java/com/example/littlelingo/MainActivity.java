@@ -47,32 +47,11 @@ public class MainActivity extends AppCompatActivity {
         });
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
-        Toast.makeText(MainActivity.this,"Before listener", Toast.LENGTH_SHORT).show();
-
-//        //for sign out
-//        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-//            @Override
-//            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-//                int id = item.getItemId();
-//                Toast.makeText(MainActivity.this,"Fail : "+id, Toast.LENGTH_SHORT).show();
-//                if (id == R.id.sign_out) {
-//                    FirebaseAuth.getInstance().signOut();
-//                    Intent intent = new Intent(MainActivity.this, SignInActivity.class);
-//                    startActivity(intent);
-//                    finish(); // Close the current activity
-//                    return true;
-//                }
-//
-//                drawer.closeDrawer(GravityCompat.START);
-//                return false;
-//            }
-//        });
-//        Toast.makeText(MainActivity.this,"After", Toast.LENGTH_SHORT).show();
 
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_vocabularylearning, R.id.nav_vocabulayquiz, R.id.nav_slideshow)
+                R.id.nav_home, R.id.nav_vocabularylearning, R.id.nav_vocabulayquiz, R.id.nav_slideshow, R.id.sign_out)
                 .setOpenableLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
@@ -80,24 +59,28 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navigationView, navController);
 
         //for sign out
-//        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-//            @Override
-//            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-//                int id = item.getItemId();
-//                Toast.makeText(MainActivity.this,"Fail : "+id, Toast.LENGTH_SHORT).show();
-//                if (id == R.id.sign_out) {
-//                    FirebaseAuth.getInstance().signOut();
-//                    Intent intent = new Intent(MainActivity.this, SignInActivity.class);
-//                    startActivity(intent);
-//                    finish(); // Close the current activity
-//                    return true;
-//                }
-//
-//                drawer.closeDrawer(GravityCompat.START);
-//                return false;
-//            }
-//        });
-        Toast.makeText(MainActivity.this,"After", Toast.LENGTH_SHORT).show();
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int id = item.getItemId();
+
+                if (id == R.id.sign_out) {
+                    FirebaseAuth.getInstance().signOut();
+                    Intent intent = new Intent(MainActivity.this, SignInActivity.class);
+                    startActivity(intent);
+                    finish(); // Close the current activity
+                    return true;
+                }else {
+                    boolean handled = NavigationUI.onNavDestinationSelected(item, navController);
+
+                        DrawerLayout drawer = binding.drawerLayout;
+                        drawer.closeDrawer(GravityCompat.START);
+
+                    return handled;
+                }
+
+            }
+        });
 
     }
 

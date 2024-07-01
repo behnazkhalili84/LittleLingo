@@ -1,5 +1,6 @@
 package com.example.littlelingo.ui.learningvocabulary;
 
+import android.content.Context;
 import android.media.MediaPlayer;
 import android.util.Log;
 
@@ -13,6 +14,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +23,7 @@ import java.util.List;
 public class VocabularyViewModel extends ViewModel {
     private static final String TAG = "LearningVocabulary";
 MediaPlayer mediaPlayer = new MediaPlayer();
+    private Context context;
     private DatabaseReference mDatabase;
     private  MutableLiveData<List<Word>> vocabularyList = new MutableLiveData<>();
     private  MutableLiveData<List<Word>> grammarList = new MutableLiveData<>();
@@ -76,16 +80,6 @@ MediaPlayer mediaPlayer = new MediaPlayer();
                         + ", Grammar Count: " + grammarWords.size());
             }
 
-//public void playAudio(String audio) {
-//    // Play audio
-//    if (mediaPlayer != null) {
-//        mediaPlayer.release();
-//        mediaPlayer = null;
-//    }
-//    mediaPlayer = MediaPlayer.create(VocabularyViewModel.this, audio);
-//    mediaPlayer.start();
-//
-//}
             public void onCancelled(DatabaseError databaseError) {
                 // Handle error
                 error.setValue("Failed to load words: " + databaseError.getMessage());
@@ -93,4 +87,39 @@ MediaPlayer mediaPlayer = new MediaPlayer();
             }
         });
     }
-}
+
+    public void playAudio(String audio) {
+        // Play audio
+        if (mediaPlayer != null) {
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("word");
+        StorageReference audioRef = FirebaseStorage.getInstance().getReferenceFromUrl(audio);
+        Log.e("AudioRef", "Failed to load audio");
+
+        audioRef.getDownloadUrl().addOnSuccessListener(uri -> {
+            mediaPlayer = new MediaPlayer();
+        try {
+            mediaPlayer.setDataSource(uri.toString());
+            mediaPlayer.prepare();
+            mediaPlayer.start();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e("LearningVocabulary", "Failed to load audio", e);
+        }
+        }).addOnFailureListener(e -> {
+            error.setValue("Failed to load audio: " + e.getMessage());
+            Log.e(TAG, "Failed to load audio: " + e.getMessage());
+        });
+    }
+    protected void onCleared() {
+        super.onCleared();
+        if (mediaPlayer != null) {
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
+    }
+
+     }
+

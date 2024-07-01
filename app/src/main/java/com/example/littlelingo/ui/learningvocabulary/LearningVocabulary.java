@@ -140,11 +140,6 @@ public class LearningVocabulary extends Fragment {
                 progressBar.setProgress(currentWordIndex.get() + 1);
                 tvProgress.setText((currentWordIndex.get() + 1) + "/" + vocabularyList.size());
 
-                // Play audio
-//                btnPlayAudio.setOnClickListener(v -> {
-//                    // Play audio
-//                    viewModel.playAudio(currentWord.getWordAudio());
-//                });
             }
         });
     }
@@ -153,13 +148,16 @@ public class LearningVocabulary extends Fragment {
         // Update UI components with data from Word object
         tvWordname.setText(word.getWordName());
         tvexampleSentence.setText(word.getExampleSentences());
+        // Play audio
+        btnPlayAudio.setOnClickListener(v -> {
+            Log.d(TAG, "Playing audio for word: " + word.getWordName());
+            viewModel.playAudio(word.getAudio());
+        });
 
-//        btnPlayAudio.setOnClickListener(v -> {
-//            // Play audio
-//            viewModel.playAudio(word.getWordAudio());
-//        })
 
     }
+
+
 
     private void addWords () {
                 {

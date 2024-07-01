@@ -48,7 +48,6 @@ public class VocabularyQuiz extends Fragment {
         super.onCreate(savedInstanceState);
         mDatabase = FirebaseDatabase.getInstance().getReference("questions");
         loadQuestions();
-//        addQuestions();
     }
 
     @Override
@@ -110,7 +109,8 @@ public class VocabularyQuiz extends Fragment {
 
     private void checkAnswer() {
         VocabularyQuestion currentQuestion = questionsList.get(currentQuestionIndex);
-        int correctAnswerPosition = Integer.parseInt(currentQuestion.getCorrectAnswer());
+        String correctAnswer = currentQuestion.getCorrectAnswer();
+        int correctAnswerPosition = getCorrectAnswerPosition(currentQuestion, correctAnswer);
 
         if (selectedOptionPosition == correctAnswerPosition) {
             showAnswerFeedback(correctAnswerPosition, R.drawable.correct_option_border_bg);
@@ -122,6 +122,14 @@ public class VocabularyQuiz extends Fragment {
         }
 
         currentQuestionIndex++;
+    }
+
+    private int getCorrectAnswerPosition(VocabularyQuestion question, String correctAnswer) {
+        if (correctAnswer.equals(question.getOptionOne())) return 1;
+        if (correctAnswer.equals(question.getOptionTwo())) return 2;
+        if (correctAnswer.equals(question.getOptionThree())) return 3;
+        if (correctAnswer.equals(question.getOptionFour())) return 4;
+        return -1; // Invalid answer
     }
 
     private void showAnswerFeedback(int optionPosition, int drawableId) {
@@ -224,11 +232,10 @@ public class VocabularyQuiz extends Fragment {
         return selectedQuestions;
     }
 
-
-
     private void navigateToResult() {
         // Implement navigation to the result screen
     }
+
 
 
     private void addQuestions() {

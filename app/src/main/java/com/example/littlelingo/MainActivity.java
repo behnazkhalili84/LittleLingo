@@ -80,23 +80,23 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navigationView, navController);
 
         //for sign out
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                int id = item.getItemId();
-                Toast.makeText(MainActivity.this,"Fail : "+id, Toast.LENGTH_SHORT).show();
-                if (id == R.id.sign_out) {
-                    FirebaseAuth.getInstance().signOut();
-                    Intent intent = new Intent(MainActivity.this, SignInActivity.class);
-                    startActivity(intent);
-                    finish(); // Close the current activity
-                    return true;
-                }
-
-                drawer.closeDrawer(GravityCompat.START);
-                return false;
-            }
-        });
+//        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+//            @Override
+//            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+//                int id = item.getItemId();
+//                Toast.makeText(MainActivity.this,"Fail : "+id, Toast.LENGTH_SHORT).show();
+//                if (id == R.id.sign_out) {
+//                    FirebaseAuth.getInstance().signOut();
+//                    Intent intent = new Intent(MainActivity.this, SignInActivity.class);
+//                    startActivity(intent);
+//                    finish(); // Close the current activity
+//                    return true;
+//                }
+//
+//                drawer.closeDrawer(GravityCompat.START);
+//                return false;
+//            }
+//        });
         Toast.makeText(MainActivity.this,"After", Toast.LENGTH_SHORT).show();
 
     }

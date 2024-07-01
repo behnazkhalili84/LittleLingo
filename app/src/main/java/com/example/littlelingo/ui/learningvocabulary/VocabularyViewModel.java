@@ -1,5 +1,6 @@
 package com.example.littlelingo.ui.learningvocabulary;
 
+import android.media.MediaPlayer;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
@@ -18,7 +19,7 @@ import java.util.List;
 
 public class VocabularyViewModel extends ViewModel {
     private static final String TAG = "LearningVocabulary";
-
+MediaPlayer mediaPlayer = new MediaPlayer();
     private DatabaseReference mDatabase;
     private  MutableLiveData<List<Word>> vocabularyList = new MutableLiveData<>();
     private  MutableLiveData<List<Word>> grammarList = new MutableLiveData<>();
@@ -75,7 +76,16 @@ public class VocabularyViewModel extends ViewModel {
                         + ", Grammar Count: " + grammarWords.size());
             }
 
-
+//public void playAudio(String audio) {
+//    // Play audio
+//    if (mediaPlayer != null) {
+//        mediaPlayer.release();
+//        mediaPlayer = null;
+//    }
+//    mediaPlayer = MediaPlayer.create(VocabularyViewModel.this, audio);
+//    mediaPlayer.start();
+//
+//}
             public void onCancelled(DatabaseError databaseError) {
                 // Handle error
                 error.setValue("Failed to load words: " + databaseError.getMessage());

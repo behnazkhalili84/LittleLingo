@@ -22,12 +22,12 @@ import com.google.android.material.textfield.TextInputLayout;
 
 public class SignUpActivity extends AppCompatActivity {
     private AuthViewModel authViewModel;
-    private EditText userNameEditText, passwordEditText;
+    private EditText userNameEditText, nameEditText, passwordEditText, retypePasswordEditText;
     private MaterialButton textButtonSignIn;
     private Button signUpButton;
 
     //for error handling
-    private TextInputLayout userNameInputLayout, passwordInputLayout;
+    private TextInputLayout userNameInputLayout, nameInputLayout, passwordInputLayout, retypePasswordInputLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,13 +37,16 @@ public class SignUpActivity extends AppCompatActivity {
 
         authViewModel = new ViewModelProvider(this).get(AuthViewModel.class);
 //authViewModel.signOut();
-
+        nameEditText = findViewById(R.id.name);
         userNameEditText = findViewById(R.id.UserName);
         passwordEditText = findViewById(R.id.password);
+        retypePasswordEditText = findViewById(R.id.retypePassword);
         signUpButton = findViewById(R.id.signUpButton);
         // from material design for better error handling
+        nameInputLayout = findViewById(R.id.nameInputLayout);
         userNameInputLayout = findViewById(R.id.userNameInputLayout);
         passwordInputLayout = findViewById(R.id.passwordInputLayout);
+        retypePasswordInputLayout = findViewById(R.id.retypePasswordInputLayout);
 
         // Add the TextWatcher to the EditTexts
         TextWatcher textWatcher = new TextWatcher() {
@@ -56,7 +59,8 @@ public class SignUpActivity extends AppCompatActivity {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String userName = userNameEditText.getText().toString().trim();
                 String password = passwordEditText.getText().toString().trim();
-                signUpButton.setEnabled(authViewModel.validateInput(userName, password, userNameInputLayout, passwordInputLayout));
+                String retypePassword = retypePasswordEditText.getText().toString().trim();
+                signUpButton.setEnabled(authViewModel.validateInput(userName, password, userNameInputLayout, passwordInputLayout, retypePassword, retypePasswordInputLayout));
             }
 
             @Override
@@ -68,13 +72,15 @@ public class SignUpActivity extends AppCompatActivity {
 // Add the TextWatcher to the EditText fields
         userNameEditText.addTextChangedListener(textWatcher);
         passwordEditText.addTextChangedListener(textWatcher);
+        retypePasswordEditText.addTextChangedListener(textWatcher);
 
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String email = userNameEditText.getText().toString().trim();
                 String password = passwordEditText.getText().toString().trim();
-                authViewModel.register(email, password);
+                String name = nameEditText.getText().toString().trim();
+                authViewModel.register(email, password, name);
             }
         });
 

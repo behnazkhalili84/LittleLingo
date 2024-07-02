@@ -1,13 +1,10 @@
 package com.example.littlelingo.ui.vocabularyquiz;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
-import java.util.Random;
-import java.util.Set;
-import java.util.HashSet;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,10 +13,14 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import java.util.Collections;
 import java.util.List;
 import java.util.ArrayList;
-
+import java.util.HashSet;
+import java.util.Random;
+import java.util.Set;
 import com.example.littlelingo.R;
+import com.example.littlelingo.ui.VocabularyResult.ResultVocabulary;
 import com.example.littlelingo.ui.learningvocabulary.Word;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.database.DataSnapshot;
@@ -42,13 +43,13 @@ public class VocabularyQuiz extends Fragment {
     private int currentQuestionIndex = 0;
     private int selectedOptionPosition = 0;
     private boolean isAnswerSubmitted = false;
+    private int currentScore = 0; // Initialize currentScore
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mDatabase = FirebaseDatabase.getInstance().getReference("questions");
-        loadQuestions();
-//        addQuestions();
+//        loadQuestions();
     }
 
     @Override
@@ -110,11 +111,14 @@ public class VocabularyQuiz extends Fragment {
 
     private void checkAnswer() {
         VocabularyQuestion currentQuestion = questionsList.get(currentQuestionIndex);
-        int correctAnswerPosition = Integer.parseInt(currentQuestion.getCorrectAnswer());
+        String correctAnswer = currentQuestion.getCorrectAnswer();
+        int correctAnswerPosition = getCorrectAnswerPosition(currentQuestion, correctAnswer);
 
         if (selectedOptionPosition == correctAnswerPosition) {
             showAnswerFeedback(correctAnswerPosition, R.drawable.correct_option_border_bg);
             Toast.makeText(getContext(), "Correct!", Toast.LENGTH_SHORT).show();
+            currentScore++; // Increment the score if the answer is correct
+            Log.d("VocabularyQuiz", "Score incremented: " + currentScore); // Debug log
         } else {
             showAnswerFeedback(correctAnswerPosition, R.drawable.correct_option_border_bg);
             showAnswerFeedback(selectedOptionPosition, R.drawable.wrong_option_border_bg);
@@ -122,6 +126,14 @@ public class VocabularyQuiz extends Fragment {
         }
 
         currentQuestionIndex++;
+    }
+
+    private int getCorrectAnswerPosition(VocabularyQuestion question, String correctAnswer) {
+        if (correctAnswer.equals(question.getOptionOne())) return 1;
+        if (correctAnswer.equals(question.getOptionTwo())) return 2;
+        if (correctAnswer.equals(question.getOptionThree())) return 3;
+        if (correctAnswer.equals(question.getOptionFour())) return 4;
+        return -1; // Invalid answer
     }
 
     private void showAnswerFeedback(int optionPosition, int drawableId) {
@@ -144,6 +156,7 @@ public class VocabularyQuiz extends Fragment {
     private void loadNextQuestion() {
         resetSelectedOption();
         VocabularyQuestion nextQuestion = questionsList.get(currentQuestionIndex);
+        shuffleOptions(nextQuestion);
         tvQuestion.setText("What is it?");
         Picasso.get().load(nextQuestion.getImage()).into(ivImage);
         tvOptionOne.setText(nextQuestion.getOptionOne());
@@ -152,6 +165,19 @@ public class VocabularyQuiz extends Fragment {
         tvOptionFour.setText(nextQuestion.getOptionFour());
         tvProgress.setText((currentQuestionIndex + 1) + "/" + questionsList.size());
         progressBar.setProgress((currentQuestionIndex + 1) * 100 / questionsList.size());
+    }
+
+    private void shuffleOptions(VocabularyQuestion question) {
+        List<String> options = new ArrayList<>();
+        options.add(question.getOptionOne());
+        options.add(question.getOptionTwo());
+        options.add(question.getOptionThree());
+        options.add(question.getOptionFour());
+        Collections.shuffle(options);
+        question.setOptionOne(options.get(0));
+        question.setOptionTwo(options.get(1));
+        question.setOptionThree(options.get(2));
+        question.setOptionFour(options.get(3));
     }
 
     private void resetSelectedOption() {
@@ -198,20 +224,12 @@ public class VocabularyQuiz extends Fragment {
 
     private List<VocabularyQuestion> getRandomQuestions(List<VocabularyQuestion> questions, int count) {
         List<VocabularyQuestion> selectedQuestions = new ArrayList<>();
-
-        // Ensure the questions list is not empty and has enough questions
-        if (questions == null || questions.isEmpty()) {
-            Toast.makeText(getContext(), "No questions available.", Toast.LENGTH_SHORT).show();
-            return selectedQuestions;
-        }
-
-        // If there are fewer questions than the count, adjust the count
         if (questions.size() < count) {
             count = questions.size();
         }
 
-        Random random = new Random();
         Set<Integer> selectedIndices = new HashSet<>();
+        Random random = new Random();
 
         while (selectedIndices.size() < count) {
             int randomIndex = random.nextInt(questions.size());
@@ -224,14 +242,18 @@ public class VocabularyQuiz extends Fragment {
         return selectedQuestions;
     }
 
-
-
     private void navigateToResult() {
-        // Implement navigation to the result screen
+        Intent intent = new Intent(getActivity(), ResultVocabulary.class);
+        mDatabase = FirebaseDatabase.getInstance().getReference("Results");
+        intent.putExtra("SCORE", currentScore); // Note the key "SCORE"
+//        intent.putExtra("USERNAME", username);// Pass the score to the result activity
+        Log.d("VocabularyQuiz", "Navigating to result with score: " + currentScore); // Debug log
+        startActivity(intent);
+        getActivity().finish();
     }
 
 
-    private void addQuestions() {
+private void addQuestions() {
 //
 ///Question1
         VocabularyQuestion vocabularyQuestion1 = new VocabularyQuestion(1, "https://firebasestorage.googleapis.com/v0/b/littlelingo-6bcce.appspot.com/o/apple.jpeg?alt=media&token=6e2a3e1b-ccd6-4997-b2bb-2fa849e48d4a",

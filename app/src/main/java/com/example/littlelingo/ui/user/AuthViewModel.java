@@ -39,8 +39,7 @@ public class AuthViewModel extends ViewModel {
         authRepository.signOut();
     }
 
-    public boolean validateInput(String userName, String password, TextInputLayout userNameInputLayout, TextInputLayout passwordInputLayout,
-                                 String retypePassword, TextInputLayout retypePasswordInputLayout) {
+    public boolean validateInput(String userName, String password, TextInputLayout userNameInputLayout, TextInputLayout passwordInputLayout) {
         boolean isValid = true;
 
         if (userName.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(userName).matches()) {
@@ -57,11 +56,20 @@ public class AuthViewModel extends ViewModel {
             passwordInputLayout.setError(null);
         }
 
-        if ((retypePassword.isEmpty() || !retypePassword.equals(password)) && !retypePassword.equals("noRetype")) {
-            retypePasswordInputLayout.setError("Retype Password does not match");
-            isValid = false;
-        } else {
-            retypePasswordInputLayout.setError(null);
+        return isValid;
+    }
+
+    public boolean validateInput(String userName, String password, TextInputLayout userNameInputLayout, TextInputLayout passwordInputLayout,
+                                 String retypePassword, TextInputLayout retypePasswordInputLayout) {
+        boolean isValid = validateInput(userName, password, userNameInputLayout, passwordInputLayout);
+
+        if (retypePassword != null && retypePasswordInputLayout != null) {
+            if (retypePassword.isEmpty() || !retypePassword.equals(password)) {
+                retypePasswordInputLayout.setError("Retype Password does not match");
+                isValid = false;
+            } else {
+                retypePasswordInputLayout.setError(null);
+            }
         }
 
         return isValid;

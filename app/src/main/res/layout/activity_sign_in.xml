@@ -5,98 +5,204 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/frame_kids"
+    android:background="@color/backgroundColor"
     tools:context=".SignInActivity">
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/passwordInputLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-
-        app:layout_constraintTop_toBottomOf="@+id/userNameInputLayout"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginStart="100dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="28dp" app:layout_constraintHorizontal_bias="0.0">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/password"
-            android:layout_width="200dp"
-            android:layout_gravity="center"
-            android:layout_height="wrap_content"
-            android:hint="Password"
-            android:inputType="textPassword"/>
-    </com.google.android.material.textfield.TextInputLayout>
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/userNameInputLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginStart="100dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="296dp" app:layout_constraintHorizontal_bias="0.0">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/UserName"
-            android:layout_width="200dp"
-            android:layout_gravity="center"
-            android:layout_height="wrap_content"
-            android:hint="User Name"
-            android:inputType="text"/>
-    </com.google.android.material.textfield.TextInputLayout>
     <LinearLayout
+        android:id="@+id/linearLayout3"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center_horizontal"
         android:orientation="vertical"
-        android:layout_width="190dp"
-        android:gravity="center"
-        android:layout_height="wrap_content"
-        android:id="@+id/linearLayout"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="100dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginStart="68dp"
-        android:layout_marginBottom="88dp" app:layout_constraintHorizontal_bias="0.274">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/textView3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="16dp"
-            android:text="Don't have account?"/>
+            android:layout_marginBottom="27dp"
+            android:text="Sign In"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/userNameInputLayout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/userNameInputLayout"
+            app:boxStrokeWidth="0dp"
+            app:boxStrokeWidthFocused="0dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/activity_horizontal_margin">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/UserName"
+                android:background="@drawable/border"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:hint="Email"
+                android:inputType="text" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/passwordInputLayout"
+            app:boxStrokeWidth="0dp"
+            app:boxStrokeWidthFocused="0dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/activity_horizontal_margin"
+            >
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/password"
+                android:background="@drawable/border"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:hint="Password"
+                android:inputType="textPassword" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/textButtonSignUp"
+            android:id="@+id/signInButton"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:paddingVertical="10dp"
+            style="@style/Widget.MyApp.RoundedButton"
+            android:enabled="false"
+            android:text="Sign In" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Already have account?"
+                android:textSize="16dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/textButtonSignUp"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/secondaryColor"
+                android:text="Sign Up" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:scaleType="fitXY"
+        android:src="@drawable/kids_ride_dragon"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <!--
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/passwordInputLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Sign Up"
-            style="@style/Widget.MaterialComponents.Button.TextButton"/>
-    </LinearLayout>
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/signInButton"
-        android:layout_width="190dp"
-        android:layout_gravity="center"
-        android:layout_height="wrap_content"
-        android:text="Sign In"
-        android:enabled="false"
 
-        app:layout_constraintTop_toBottomOf="@+id/passwordInputLayout"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="20dp" app:layout_constraintHorizontal_bias="0.502"/>
-    <TextView
-        android:text="Sign In"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="20dp"
-        android:textStyle="bold"
-        android:id="@+id/textView2"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginBottom="27dp" app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/userNameInputLayout"/>
+            app:layout_constraintTop_toBottomOf="@+id/userNameInputLayout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginStart="100dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="28dp" app:layout_constraintHorizontal_bias="0.0">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/password"
+                android:layout_width="200dp"
+                android:layout_gravity="center"
+                android:layout_height="wrap_content"
+                android:hint="Password"
+                android:inputType="textPassword"/>
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/userNameInputLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginStart="100dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="296dp" app:layout_constraintHorizontal_bias="0.0">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/UserName"
+                android:layout_width="200dp"
+                android:layout_gravity="center"
+                android:layout_height="wrap_content"
+                android:hint="User Name"
+                android:inputType="text"/>
+        </com.google.android.material.textfield.TextInputLayout>
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="190dp"
+            android:gravity="center"
+            android:layout_height="wrap_content"
+            android:id="@+id/linearLayout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginStart="68dp"
+            android:layout_marginBottom="88dp" app:layout_constraintHorizontal_bias="0.274">
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16dp"
+                android:text="Don't have account?"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/textButtonSignUp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sign Up"
+                style="@style/Widget.MaterialComponents.Button.TextButton"/>
+        </LinearLayout>
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/signInButton"
+            android:layout_width="190dp"
+            android:layout_gravity="center"
+            android:layout_height="wrap_content"
+            android:text="Sign In"
+            android:enabled="false"
+
+            app:layout_constraintTop_toBottomOf="@+id/passwordInputLayout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="20dp" app:layout_constraintHorizontal_bias="0.502"/>
+        <TextView
+            android:text="Sign In"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            android:id="@+id/textView2"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginBottom="27dp" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/userNameInputLayout"/> -->
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

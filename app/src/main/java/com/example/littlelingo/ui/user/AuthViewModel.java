@@ -30,8 +30,8 @@ public class AuthViewModel extends ViewModel {
         authRepository.login(email, password);
     }
 
-    public void register(String email, String password){
-        authRepository.register(email, password);
+    public void register(String email, String password, String name){
+        authRepository.register(email, password, name);
         //Log.d(TAG, String.format("register: %s, %s", email, password));
     }
 
@@ -49,11 +49,27 @@ public class AuthViewModel extends ViewModel {
             userNameInputLayout.setError(null);
         }
 
-        if (password.isEmpty() || password.length() < 4 || !password.matches("^[a-zA-Z0-9.$]+$")) {
-            passwordInputLayout.setError("Password must be at least 4 characters long and contain only letters, numbers, dots, and dollar signs");
+        if (password.isEmpty() || password.length() < 6 || !password.matches("^[a-zA-Z0-9.$]+$")) {
+            passwordInputLayout.setError("Password must be at least 6 characters long and contain only letters, numbers, dots, and dollar signs");
             isValid = false;
         } else {
             passwordInputLayout.setError(null);
+        }
+
+        return isValid;
+    }
+
+    public boolean validateInput(String userName, String password, TextInputLayout userNameInputLayout, TextInputLayout passwordInputLayout,
+                                 String retypePassword, TextInputLayout retypePasswordInputLayout) {
+        boolean isValid = validateInput(userName, password, userNameInputLayout, passwordInputLayout);
+
+        if (retypePassword != null && retypePasswordInputLayout != null) {
+            if (retypePassword.isEmpty() || !retypePassword.equals(password)) {
+                retypePasswordInputLayout.setError("Retype Password does not match");
+                isValid = false;
+            } else {
+                retypePasswordInputLayout.setError(null);
+            }
         }
 
         return isValid;

@@ -56,7 +56,7 @@ authViewModel.signOut();
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String userName = userNameEditText.getText().toString().trim();
                 String password = passwordEditText.getText().toString().trim();
-                signInButton.setEnabled(authViewModel.validateInput(userName, password, userNameInputLayout, passwordInputLayout));
+                signInButton.setEnabled(authViewModel.validateInput(userName, password, userNameInputLayout, passwordInputLayout,"noRetype", passwordInputLayout));
             }
 
             @Override

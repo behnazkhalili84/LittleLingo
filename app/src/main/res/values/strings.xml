@@ -41,6 +41,13 @@
     <string name="littlelingo">LittleLingo</string>
     <string name="littlelingo1">LittleLingo</string>
     <string name="back">BACK</string>
+    <string name="price">Price: $</string>
+    <string name="checkout">Checkout</string>
+    <string name="product_name">Product Name</string>
+    <string name="store">Store</string>
+    <string name="card_number">Card Number</string>
+    <string name="mm_yy">MM/YY</string>
+    <string name="cvv">CVV</string>
 
     >>>>>>> d6c38f10678327a61eb2a005ac638a590bca94ac
 </resources>

@@ -24,6 +24,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.littlelingo.databinding.ActivityMainBinding;
 import com.google.firebase.auth.FirebaseAuth;
+import com.stripe.android.PaymentConfiguration;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -38,6 +39,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         setSupportActionBar(binding.appBarMain.toolbar);
+        PaymentConfiguration.init(
+                getApplicationContext(),
+                "your-publishable-key-from-stripe"
+        );
         binding.appBarMain.fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -51,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_vocabularylearning, R.id.nav_vocabulayquiz, R.id.nav_slideshow, R.id.sign_out)
+                R.id.nav_home, R.id.nav_vocabularylearning, R.id.nav_vocabulayquiz, R.id.nav_slideshow, R.id.sign_out, R.id.nav_shopping)
                 .setOpenableLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);

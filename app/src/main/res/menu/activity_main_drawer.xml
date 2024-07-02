@@ -23,6 +23,11 @@
                 android:title="@string/menu_slideshow"/>
 
         <item
+            android:id="@+id/nav_shopping"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="@string/store"/>
+
+        <item
             android:id="@+id/sign_out"
             android:icon="@drawable/ic_logout_24px"
             android:title="@string/SignOut"/>

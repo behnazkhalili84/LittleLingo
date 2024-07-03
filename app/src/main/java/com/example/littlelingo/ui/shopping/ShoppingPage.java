@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.example.littlelingo.R;
 import com.stripe.android.PaymentConfiguration;
 
+import okhttp3.Request;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -24,7 +25,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ShoppingPage extends Fragment {
 
     private static final String TAG = "ShoppingActivity";
-    private static final String BASE_URL = "http://10.0.2.2:3000/"; // Use the emulator's localhost address
+    private static final String BASE_URL = "https://api.stripe.com/";;
 
     private ApiService apiService;
 
@@ -33,7 +34,7 @@ public class ShoppingPage extends Fragment {
 @Override
 public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     View view = inflater.inflate(R.layout.fragment_shopping_page, container, false);
-    
+
         Button btnCreatePaymentIntent = view.findViewById(R.id.checkoutButton);
         btnCreatePaymentIntent.setOnClickListener(v -> createPaymentIntent());
 
@@ -51,10 +52,15 @@ public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle sa
         ApiService apiService = retrofit.create(ApiService.class);
 
         // Create PaymentIntentRequest
-        PaymentIntentRequest request = new PaymentIntentRequest(5000, "usd"); // Example: 5000 cents = $50.00
+        PaymentIntentRequest request = new PaymentIntentRequest(5000, "cad"); // Example: 5000 cents = $50.00
 
         // Make network request
-        Call<PaymentIntentResponse> call = apiService.createPaymentIntent(request);
+        Call<PaymentIntentResponse> call = apiService.createPaymentIntent(
+                "Bearer sk_test_51PXtLyDaLkoIps9pRiStHFkHpyiYYC2KsPEMyLrQhtLkRj8x6uWnznBEowGrzE6ON7eeODAhzUMF4s1zq0MPzhHH00e1jqDzSL",
+                request
+        );
+
+   //Enqueue the call
         call.enqueue(new Callback<PaymentIntentResponse>() {
             @Override
             public void onResponse(Call<PaymentIntentResponse> call, Response<PaymentIntentResponse> response) {
@@ -76,7 +82,7 @@ public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle sa
             @Override
             public void onFailure(Call<PaymentIntentResponse> call, Throwable t) {
                 // Handle failure
-                Toast.makeText(getContext(), "Failed to create payment intent", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "onFailoure Failed to create payment intent", Toast.LENGTH_SHORT).show();
                 Log.e(TAG, "Network request failed", t);
 
             }

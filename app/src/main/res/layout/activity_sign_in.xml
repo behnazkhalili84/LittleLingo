@@ -78,11 +78,20 @@
             android:enabled="false"
             android:text="Sign In" />
 
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/textForgotPassword"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/secondaryColor"
+            android:text="Forgot Password?" />
+
         <LinearLayout
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:layout_marginTop="16dp"
             android:orientation="horizontal">
 
             <TextView

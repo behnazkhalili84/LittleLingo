@@ -86,7 +86,15 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
+        // get arg from intent
+        String userName = getIntent().getStringExtra("name");
+        String userID = getIntent().getStringExtra("userID");
+        Bundle bundle = new Bundle();
+        bundle.putString("name", userName);
+        bundle.putString("userID", userID);
+        navController.navigate(R.id.nav_home, bundle);
+        // pass bundle args to the starting navigation graph
+        //navController.setGraph(navController.getGraph(), bundle);
     }
 
     @Override

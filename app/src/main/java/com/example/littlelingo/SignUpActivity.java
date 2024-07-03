@@ -100,7 +100,8 @@ public class SignUpActivity extends AppCompatActivity {
                 Toast.makeText(SignUpActivity.this,"Sign Up Successful", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
                 intent.putExtra("name",user.getName());
-                Toast.makeText(SignUpActivity.this,"SignUp intent: "+ intent.getStringExtra("name"), Toast.LENGTH_SHORT).show();
+                intent.putExtra("userID",user.getUserId());
+                //Toast.makeText(SignUpActivity.this,"SignUp intent: "+ intent.getStringExtra("name"), Toast.LENGTH_SHORT).show();
 
                 startActivity(intent);
                 finish();

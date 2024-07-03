@@ -16,6 +16,7 @@ import com.google.android.material.navigation.NavigationView;
 
 import androidx.annotation.NonNull;
 import androidx.core.view.GravityCompat;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -25,11 +26,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.littlelingo.databinding.ActivityMainBinding;
 import com.google.firebase.auth.FirebaseAuth;
 import com.stripe.android.PaymentConfiguration;
+import com.example.littlelingo.ui.SharedViewModel;
 
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
+    private SharedViewModel sharedViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +89,24 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+        // Initialize SharedViewModel
+        sharedViewModel = new ViewModelProvider(this).get(SharedViewModel.class);
+
+        // get arg from intent
+        String userName = getIntent().getStringExtra("name");
+        String userID = getIntent().getStringExtra("userID");
+
+        sharedViewModel.setName(userName);
+        sharedViewModel.setUserID(userID);
+
+//        Bundle bundle = new Bundle();
+//        bundle.putString("name", userName);
+//        bundle.putString("userID", userID);
+        //navController.navigate(R.id.nav_home, bundle);
+        // pass bundle args to the starting navigation graph
+        //navController.setGraph(navController.getGraph(), bundle);
+        // Set values in SharedViewModel
 
     }
 

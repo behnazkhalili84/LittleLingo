@@ -15,7 +15,7 @@ import com.google.firebase.database.FirebaseDatabase;
 public class AuthRepository {
     private FirebaseAuth firebaseAuth;
     private DatabaseReference databaseReference;
-    private MutableLiveData<FirebaseUser> userLiveData;
+    private MutableLiveData<Users> userLiveData;
     private MutableLiveData<Boolean> loggedOutLiveData;
     private String authError ;
 
@@ -28,7 +28,7 @@ public class AuthRepository {
         authError = "";
 
         if (firebaseAuth.getCurrentUser() != null) {
-            userLiveData.postValue(firebaseAuth.getCurrentUser());
+            fetchUserData(firebaseAuth.getCurrentUser().getUid());
             loggedOutLiveData.postValue(false);
         }
     }
@@ -36,7 +36,7 @@ public class AuthRepository {
     public  void login(String email, String password){
         firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener( task->{
            if(task.isSuccessful()) {
-               userLiveData.postValue(firebaseAuth.getCurrentUser());
+               fetchUserData(firebaseAuth.getCurrentUser().getUid());
            } else {
                userLiveData.postValue(null);
            }
@@ -52,9 +52,15 @@ public class AuthRepository {
                 if (firebaseUser != null) {
                     String userId = firebaseUser.getUid();
                     //Users user = new Users(userId, name, age, nativeLanguage, dateOfBirth);
-                    Users user = new Users(userId, name, 0, "", "");
-                    databaseReference.child("users").child(userId).setValue(user);
-                    userLiveData.postValue(firebaseUser);
+                    Users user = new Users(userId, name,firebaseUser.getEmail(), 0, "", "");
+                    databaseReference.child("users").child(userId).setValue(user).addOnCompleteListener(dbTask -> {
+                        if (dbTask.isSuccessful()) {
+                            userLiveData.postValue(user);
+                        } else {
+                            authError = dbTask.getException().getMessage();
+                            userLiveData.postValue(null);
+                        }
+                    });
                 }
             } else {
                 authError = task.getException().getMessage();
@@ -64,13 +70,25 @@ public class AuthRepository {
         });
     }
 
+    private void fetchUserData(String userId) {
+        databaseReference.child("users").child(userId).get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                Users user = task.getResult().getValue(Users.class);
+                if (user != null) {
+                    userLiveData.postValue(user);
+                }
+            } else {
+                Log.e(TAG, "Failed to fetch user data: ", task.getException());
+            }
+        });
+    }
     public void signOut(){
         firebaseAuth.signOut();
         loggedOutLiveData.postValue(true);
     }
 
     //Getters
-    public LiveData<FirebaseUser> getUserLiveData(){
+    public LiveData<Users> getUserLiveData(){
         return userLiveData;
     }
 

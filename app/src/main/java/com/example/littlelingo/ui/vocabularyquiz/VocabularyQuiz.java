@@ -49,7 +49,7 @@ public class VocabularyQuiz extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mDatabase = FirebaseDatabase.getInstance().getReference("questions");
-//        loadQuestions();
+        loadQuestions();
     }
 
     @Override
@@ -397,3 +397,5 @@ private void addQuestions() {
         mDatabase.child("17").setValue(vocabularyQuestion17);
     }
 }
+//553b8c2a31b52d4e0c69d9c185d007e3-623e10c8-9148d441
+//sandbox8ca82183ec064960bac4f2195f9eedf4.mailgun.org

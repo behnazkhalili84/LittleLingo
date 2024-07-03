@@ -6,6 +6,7 @@ import java.util.Map;
 public class Users {
     private String userId;
     private String name;
+    private String email;
     private int age;
     private String nativeLanguage;
     private String dateOfBirth; // Format: YYYY-MM-DD
@@ -18,8 +19,9 @@ public class Users {
     }
 
     // Constructor with parameters
-    public Users(String userId, String name, int age, String nativeLanguage, String dateOfBirth) {
+    public Users(String userId, String name, String email, int age, String nativeLanguage, String dateOfBirth) {
         this.userId = userId;
+        this.email = email;
         this.name = name;
         this.age = age;
         this.nativeLanguage = nativeLanguage;
@@ -79,6 +81,14 @@ public class Users {
     // Method to add a score
     public void addScore(String scoreId, int score) {
         this.scores.put(scoreId, score);
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }
 

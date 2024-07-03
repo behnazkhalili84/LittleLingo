@@ -13,7 +13,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class AuthViewModel extends ViewModel {
     private  AuthRepository authRepository; // user auth model
-    private LiveData<FirebaseUser> userLiveData;
+    private LiveData<Users> userLiveData;
     private LiveData<Boolean> loggedoutLiveData;
     public String authError;
 
@@ -76,7 +76,7 @@ public class AuthViewModel extends ViewModel {
     }
 
     //Getters
-    public LiveData<FirebaseUser> getUserLiveData() {
+    public LiveData<Users> getUserLiveData() {
         return userLiveData;
     }
 

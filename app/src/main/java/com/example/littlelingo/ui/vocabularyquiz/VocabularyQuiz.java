@@ -23,6 +23,7 @@ import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 import com.example.littlelingo.R;
+import com.example.littlelingo.ui.SharedViewModel;
 import com.example.littlelingo.ui.VocabularyResult.ResultVocabulary;
 import com.example.littlelingo.ui.user.AuthRepository;
 import com.example.littlelingo.ui.user.Users;
@@ -44,6 +45,7 @@ public class VocabularyQuiz extends Fragment {
     MaterialButton btnSubmit;
 
     private DatabaseReference mDatabase;
+    private SharedViewModel sharedViewModel;
     private List<VocabularyQuestion> questionsList = new ArrayList<>();
     private Set<String> askedQuestionIds = new HashSet<>();
     private int currentQuestionIndex = 0;
@@ -53,6 +55,8 @@ public class VocabularyQuiz extends Fragment {
     private VocabularyQuizViewModel viewModel;
     private String userId;
     private String username;
+
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -66,9 +70,25 @@ public class VocabularyQuiz extends Fragment {
         View view = inflater.inflate(R.layout.fragment_vocabulary_quiz, container, false);
         setupUI(view);
         setupListeners();
+        // Initialize SharedViewModel
+        sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
+        // Observe SharedViewModel data
+        sharedViewModel.getName().observe(getViewLifecycleOwner(), new Observer<String>() {
+            @Override
+            public void onChanged(String name) {
+                username = name;
+                Log.d("VocabularyQuiz", "Username from ViewModel: " + username);
+            }
+        });
+        sharedViewModel.getUserID().observe(getViewLifecycleOwner(), new Observer<String>() {
+            @Override
+            public void onChanged(String id) {
+                userId = id;
+                Log.d("VocabularyQuiz", "UserID from ViewModel: " + userId);
+            }
+        });
         return view;
     }
-
     @SuppressLint("WrongViewCast")
     private void setupUI(View view) {
         tvQuestion = view.findViewById(R.id.tv_question);
@@ -239,7 +259,7 @@ public class VocabularyQuiz extends Fragment {
             int index = random.nextInt(allQuestions.size());
             VocabularyQuestion randomQuestion = allQuestions.get(index);
 
-            if (!askedQuestionIds.contains(String.valueOf(randomQuestion.getId()))) { 
+            if (!askedQuestionIds.contains(String.valueOf(randomQuestion.getId()))) {
                 selectedQuestions.add(randomQuestion);
                 askedQuestionIds.add(String.valueOf(randomQuestion.getId()));
             }

@@ -76,12 +76,17 @@ public class AuthRepository {
                 Users user = task.getResult().getValue(Users.class);
                 if (user != null) {
                     userLiveData.postValue(user);
+                } else {
+                    Log.e(TAG, "User data not found");
+                    userLiveData.postValue(null); // Add this line to handle error case
                 }
             } else {
                 Log.e(TAG, "Failed to fetch user data: ", task.getException());
+                userLiveData.postValue(null); // Add this line to handle error case
             }
         });
     }
+
     public void signOut(){
         firebaseAuth.signOut();
         loggedOutLiveData.postValue(true);

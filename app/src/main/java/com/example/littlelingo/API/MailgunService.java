@@ -50,6 +50,8 @@ public class MailgunService {
         }
     }
 }
-
+//old api
 //sandboxad7e3b4966de4c938a90fb863061260a.mailgun.org
 //33d655e7ac6b29ceaa50a1b4d0c78579-623e10c8-1f41a326
+//new key
+//98dda2cf55d65e1c3b2563e7691db22f-623e10c8-720a8c63

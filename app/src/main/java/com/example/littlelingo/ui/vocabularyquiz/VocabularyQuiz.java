@@ -5,6 +5,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,15 +16,24 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.text.SimpleDateFormat;
 import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Locale;
+import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import com.example.littlelingo.R;
+import com.example.littlelingo.ui.SharedViewModel;
 import com.example.littlelingo.ui.VocabularyResult.ResultVocabulary;
-import com.example.littlelingo.ui.learningvocabulary.Word;
+import com.example.littlelingo.ui.user.AuthRepository;
+import com.example.littlelingo.ui.user.Users;
+import com.example.littlelingo.ui.user.Users;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -39,11 +51,18 @@ public class VocabularyQuiz extends Fragment {
     MaterialButton btnSubmit;
 
     private DatabaseReference mDatabase;
+    private SharedViewModel sharedViewModel;
     private List<VocabularyQuestion> questionsList = new ArrayList<>();
+    private Set<String> askedQuestionIds = new HashSet<>();
     private int currentQuestionIndex = 0;
     private int selectedOptionPosition = 0;
     private boolean isAnswerSubmitted = false;
     private int currentScore = 0; // Initialize currentScore
+    private VocabularyQuizViewModel viewModel;
+    private String userId;
+    private String username;
+
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -57,9 +76,25 @@ public class VocabularyQuiz extends Fragment {
         View view = inflater.inflate(R.layout.fragment_vocabulary_quiz, container, false);
         setupUI(view);
         setupListeners();
+        // Initialize SharedViewModel
+        sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
+        // Observe SharedViewModel data
+        sharedViewModel.getName().observe(getViewLifecycleOwner(), new Observer<String>() {
+            @Override
+            public void onChanged(String name) {
+                username = name;
+                Log.d("VocabularyQuiz", "Username from ViewModel: " + username);
+            }
+        });
+        sharedViewModel.getUserID().observe(getViewLifecycleOwner(), new Observer<String>() {
+            @Override
+            public void onChanged(String id) {
+                userId = id;
+                Log.d("VocabularyQuiz", "UserID from ViewModel: " + userId);
+            }
+        });
         return view;
     }
-
     @SuppressLint("WrongViewCast")
     private void setupUI(View view) {
         tvQuestion = view.findViewById(R.id.tv_question);
@@ -217,25 +252,22 @@ public class VocabularyQuiz extends Fragment {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(getContext(), "Failed to load questions", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Failed to load questions from database.", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    private List<VocabularyQuestion> getRandomQuestions(List<VocabularyQuestion> questions, int count) {
+    private List<VocabularyQuestion> getRandomQuestions(List<VocabularyQuestion> allQuestions, int count) {
         List<VocabularyQuestion> selectedQuestions = new ArrayList<>();
-        if (questions.size() < count) {
-            count = questions.size();
-        }
-
-        Set<Integer> selectedIndices = new HashSet<>();
         Random random = new Random();
 
-        while (selectedIndices.size() < count) {
-            int randomIndex = random.nextInt(questions.size());
-            if (!selectedIndices.contains(randomIndex)) {
-                selectedIndices.add(randomIndex);
-                selectedQuestions.add(questions.get(randomIndex));
+        while (selectedQuestions.size() < count && selectedQuestions.size() < allQuestions.size()) {
+            int index = random.nextInt(allQuestions.size());
+            VocabularyQuestion randomQuestion = allQuestions.get(index);
+
+            if (!askedQuestionIds.contains(String.valueOf(randomQuestion.getId()))) {
+                selectedQuestions.add(randomQuestion);
+                askedQuestionIds.add(String.valueOf(randomQuestion.getId()));
             }
         }
 
@@ -243,6 +275,7 @@ public class VocabularyQuiz extends Fragment {
     }
 
     private void navigateToResult() {
+        storeScoreToDatabase(userId, currentScore);
         Intent intent = new Intent(getActivity(), ResultVocabulary.class);
         mDatabase = FirebaseDatabase.getInstance().getReference("Results");
         intent.putExtra("SCORE", currentScore); // Note the key "SCORE"
@@ -252,8 +285,30 @@ public class VocabularyQuiz extends Fragment {
         getActivity().finish();
     }
 
+    private void storeScoreToDatabase(String userId, int currentScore) {
+        // Get the current date
+        String currentDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
 
-private void addQuestions() {
+        // Get a reference to the current user's scores node under "users" table
+        DatabaseReference userScoresRef = FirebaseDatabase.getInstance().getReference("users").child(userId).child("scores");
+
+        // Generate a new unique key for the score entry
+        String scoreId = userScoresRef.push().getKey();
+
+        // Create a map to store score details
+        Map<String, Object> scoreDetails = new HashMap<>();
+        scoreDetails.put("date", currentDate);
+        scoreDetails.put("quizType", "Vocabulary Quiz");
+        scoreDetails.put("score", currentScore);
+
+        // Save the score details to the database under the generated key
+        userScoresRef.child(scoreId).setValue(scoreDetails);
+    }
+
+
+
+
+    private void addQuestions() {
 //
 ///Question1
         VocabularyQuestion vocabularyQuestion1 = new VocabularyQuestion(1, "https://firebasestorage.googleapis.com/v0/b/littlelingo-6bcce.appspot.com/o/apple.jpeg?alt=media&token=6e2a3e1b-ccd6-4997-b2bb-2fa849e48d4a",
@@ -399,3 +454,7 @@ private void addQuestions() {
 }
 //553b8c2a31b52d4e0c69d9c185d007e3-623e10c8-9148d441
 //sandbox8ca82183ec064960bac4f2195f9eedf4.mailgun.org
+
+//98dda2cf55d65e1c3b2563e7691db22f-623e10c8-720a8c63
+//A new password has been created for postmaster@sandboxad7e3b4966de4c938a90fb863061260a.mailgun.org. Click “Copy” to copy it to the clipboard.
+//

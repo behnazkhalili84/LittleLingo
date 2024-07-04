@@ -45,4 +45,10 @@
         android:name="com.example.littlelingo.ui.shopping.ShoppingPage"
         android:label="@string/menu_slideshow"
         tools:layout="@layout/fragment_shopping_page"/>
+
+    <fragment
+        android:id="@+id/nav_profile"
+        android:name="com.example.littlelingo.ui.user.ProfileFragment"
+        android:label="Profile"
+        tools:layout="@layout/fragment_profile" />
 </navigation>

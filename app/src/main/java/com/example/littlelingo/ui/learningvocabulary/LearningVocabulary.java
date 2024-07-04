@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.littlelingo.R;
+import com.example.littlelingo.ui.SharedViewModel;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -36,6 +37,7 @@ public class LearningVocabulary extends Fragment {
     private static final String TAG = "LearningVocabularyViewModel";
     private VocabularyViewModel viewModel;
     private ViewModelProvider.Factory viewModelFactory;
+    private SharedViewModel sharedViewModel;
 
     private DatabaseReference mDatabase;
 
@@ -70,8 +72,22 @@ public class LearningVocabulary extends Fragment {
 
     public View onCreateView (@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-       return inflater.inflate(R.layout.fragment_learning_vocabulary, container, false);
+       View view =  inflater.inflate(R.layout.fragment_learning_vocabulary, container, false);
 
+        // Access SharedViewModel
+        sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
+
+        // Observe data from SharedViewModel
+        sharedViewModel.getName().observe(getViewLifecycleOwner(), name -> {
+            Toast.makeText(getContext(), "Name: " + name, Toast.LENGTH_SHORT).show();
+            // you can user the variable name here
+        });
+
+//        sharedViewModel.getUserID().observe(getViewLifecycleOwner(), userID -> {
+//            // add code here when you need user ID
+//            // Toast.makeText(getContext(), "UserID: " + userID, Toast.LENGTH_SHORT).show();
+//        });
+    return view;
     }
 
     @Override

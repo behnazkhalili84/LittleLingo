@@ -90,5 +90,18 @@ public class Users {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    @Override
+    public String toString() {
+        return "Users{" +
+                "userId='" + userId + '\'' +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", age=" + age +
+                ", nativeLanguage='" + nativeLanguage + '\'' +
+                ", dateOfBirth='" + dateOfBirth + '\'' +
+                ", scores=" + scores +
+                '}';
+    }
 }
 

@@ -42,19 +42,6 @@ public class HomeFragment extends Fragment {
            // Toast.makeText(getContext(), "UserID: " + userID, Toast.LENGTH_SHORT).show();
         });
 
-        // Get arguments safely
-//        if (getArguments() != null) {
-//            String name = getArguments().getString("name");
-//            String userID = getArguments().getString("userID");
-//            if (name != null) {
-//              //  Toast.makeText(getContext(), "Home get args: " + message+" "+message2, Toast.LENGTH_SHORT).show();
-//                homeViewModel.setText(name+" "+userID);
-//            }
-//        }
-//        else{
-//            Toast.makeText(getContext(),"Home Intent: failllll ", Toast.LENGTH_SHORT).show();
-//
-//        }
 
         final TextView textView = binding.textHome;
         homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);

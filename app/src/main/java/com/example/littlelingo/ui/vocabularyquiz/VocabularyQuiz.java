@@ -16,10 +16,16 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.text.SimpleDateFormat;
 import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Locale;
+import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import com.example.littlelingo.R;
@@ -269,6 +275,7 @@ public class VocabularyQuiz extends Fragment {
     }
 
     private void navigateToResult() {
+        storeScoreToDatabase(userId, currentScore);
         Intent intent = new Intent(getActivity(), ResultVocabulary.class);
         mDatabase = FirebaseDatabase.getInstance().getReference("Results");
         intent.putExtra("SCORE", currentScore); // Note the key "SCORE"
@@ -278,8 +285,30 @@ public class VocabularyQuiz extends Fragment {
         getActivity().finish();
     }
 
+    private void storeScoreToDatabase(String userId, int currentScore) {
+        // Get the current date
+        String currentDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
 
-private void addQuestions() {
+        // Get a reference to the current user's scores node under "users" table
+        DatabaseReference userScoresRef = FirebaseDatabase.getInstance().getReference("users").child(userId).child("scores");
+
+        // Generate a new unique key for the score entry
+        String scoreId = userScoresRef.push().getKey();
+
+        // Create a map to store score details
+        Map<String, Object> scoreDetails = new HashMap<>();
+        scoreDetails.put("date", currentDate);
+        scoreDetails.put("quizType", "Vocabulary Quiz");
+        scoreDetails.put("score", currentScore);
+
+        // Save the score details to the database under the generated key
+        userScoresRef.child(scoreId).setValue(scoreDetails);
+    }
+
+
+
+
+    private void addQuestions() {
 //
 ///Question1
         VocabularyQuestion vocabularyQuestion1 = new VocabularyQuestion(1, "https://firebasestorage.googleapis.com/v0/b/littlelingo-6bcce.appspot.com/o/apple.jpeg?alt=media&token=6e2a3e1b-ccd6-4997-b2bb-2fa849e48d4a",

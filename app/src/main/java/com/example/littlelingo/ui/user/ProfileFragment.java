@@ -12,7 +12,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
@@ -119,8 +118,8 @@ public class ProfileFragment extends Fragment {
             public void onClick(View v) {
                 usernameEditText.setEnabled(true);
                 emailEditText.setEnabled(true);
-//                ageEditText.setEnabled(true);
-//                nativeLangEditText.setEnabled(true);
+                ageEditText.setEnabled(true);
+                nativeLangEditText.setEnabled(true);
                 saveButton.setVisibility(View.VISIBLE);
                 cancelButton.setVisibility(View.VISIBLE);
                 editButton.setVisibility(View.GONE);
@@ -133,15 +132,16 @@ public class ProfileFragment extends Fragment {
             public void onClick(View v) {
                 String updatedUsername = usernameEditText.getText().toString();
                 String updatedEmail = emailEditText.getText().toString();
-//                String updatedAge = ageEditText.getText().toString();
-//                String updatedNativeLang = nativeLangEditText.getText().toString();
+                String updatedAge = ageEditText.getText().toString();
+                String updatedNativeLang = nativeLangEditText.getText().toString();
 
-                // update logic here
+                Users updatedUser = new Users(authViewModel.getUserLiveData().getValue().getUserId(), updatedUsername, updatedEmail, Integer.parseInt(updatedAge), updatedNativeLang, authViewModel.getUserLiveData().getValue().getDateOfBirth());
+                authViewModel.updateUser(updatedUser);
 
                 usernameEditText.setEnabled(false);
                 emailEditText.setEnabled(false);
-//                ageEditText.setEnabled(false);
-//                nativeLangEditText.setEnabled(false);
+                ageEditText.setEnabled(false);
+                nativeLangEditText.setEnabled(false);
                 saveButton.setVisibility(View.GONE);
                 cancelButton.setVisibility(View.GONE);
                 editButton.setVisibility(View.VISIBLE);
@@ -159,15 +159,15 @@ public class ProfileFragment extends Fragment {
                         usernameEditText.setText(user.getName());
                         emailEditText.setText(user.getEmail());
 
-//                        ageEditText.setText(user.getAge());
-//                        nativeLangEditText.setText(user.getNativeLanguage());
+                        ageEditText.setText(user.getAge());
+                        nativeLangEditText.setText(user.getNativeLanguage());
                     }
                 });
                 usernameEditText.setEnabled(false);
                 emailEditText.setEnabled(false);
 
-//                ageEditText.setEnabled(false);
-//                nativeLangEditText.setEnabled(false);
+                ageEditText.setEnabled(false);
+                nativeLangEditText.setEnabled(false);
                 saveButton.setVisibility(View.GONE);
                 cancelButton.setVisibility(View.GONE);
                 editButton.setVisibility(View.VISIBLE);

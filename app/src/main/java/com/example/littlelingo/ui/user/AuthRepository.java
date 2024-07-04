@@ -87,6 +87,17 @@ public class AuthRepository {
         });
     }
 
+    public void updateUser(Users user) {
+        databaseReference.child("users").child(user.getUserId()).setValue(user)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        userLiveData.postValue(user);
+                    } else {
+                        Log.e(TAG, "Failed to update user data: ", task.getException());
+                    }
+                });
+    }
+
     public void signOut(){
         firebaseAuth.signOut();
         loggedOutLiveData.postValue(true);

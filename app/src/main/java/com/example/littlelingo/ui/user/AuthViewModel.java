@@ -75,6 +75,10 @@ public class AuthViewModel extends ViewModel {
         return isValid;
     }
 
+    public void updateUser(Users user) {
+        authRepository.updateUser(user);
+    }
+
     //Getters
     public LiveData<Users> getUserLiveData() {
         return userLiveData;

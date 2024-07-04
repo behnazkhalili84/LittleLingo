@@ -10,8 +10,13 @@
                 android:title="@string/menu_home"/>
         <item
                 android:id="@+id/nav_vocabularylearning"
-                android:icon="@drawable/ic_menu_slideshow"
+                android:icon="@drawable/education_24"
                 android:title="@string/learning_vocabulary"/>
+
+        <item
+            android:id="@+id/nav_grammarLearning"
+            android:icon="@drawable/education_24"
+            android:title="@string/learning_grammar"/>
         <item
             android:id="@+id/nav_vocabulayquiz"
             android:icon="@drawable/quiz_24"

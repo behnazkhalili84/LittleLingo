@@ -16,6 +16,13 @@
             android:name="com.example.littlelingo.ui.learningvocabulary.LearningVocabulary"
             android:label="@string/menu_gallery"
             tools:layout="@layout/fragment_learning_vocabulary"/>
+
+    <fragment
+        android:id="@+id/nav_grammarLearning"
+        android:name="com.example.littlelingo.ui.Learningrammar.learningGrammar"
+        android:label="Learning Grammar"
+        tools:layout="@layout/fragment_learning_grammar"/>
+
     <fragment
         android:id="@+id/nav_vocabulayquiz"
         android:name="com.example.littlelingo.ui.vocabularyquiz.VocabularyQuiz"

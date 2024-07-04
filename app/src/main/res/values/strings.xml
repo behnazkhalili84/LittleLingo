@@ -10,7 +10,6 @@
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="leaning_grammar">Leaning Grammar</string>
     <string name="learning_vocabulary">Learning Vocabulary</string>
@@ -137,6 +136,10 @@
         "For example, position the FAB to one side of stream of a cards so the FAB won’t interfere "
         "when a user tries to pick up one of cards.\n\n"
     </string>
+    <string name="learning_grammar">Learning Grammar</string>
+    <string name="alligator">Alligator</string>
+    <string name="apple">Apple</string>
+    <string name="ant">Ant</string>
 
     >>>>>>> d6c38f10678327a61eb2a005ac638a590bca94ac
 </resources>

@@ -22,12 +22,13 @@ import java.util.List;
 
 public class VocabularyViewModel extends ViewModel {
     private static final String TAG = "LearningVocabulary";
-MediaPlayer mediaPlayer = new MediaPlayer();
+
+    MediaPlayer mediaPlayer = new MediaPlayer();
     private Context context;
     private DatabaseReference mDatabase;
-    private  MutableLiveData<List<Word>> vocabularyList = new MutableLiveData<>();
-    private  MutableLiveData<List<Word>> grammarList = new MutableLiveData<>();
-    private  MutableLiveData<String> error = new MutableLiveData<>();
+    private MutableLiveData<List<Word>> vocabularyList = new MutableLiveData<>();
+    private MutableLiveData<List<Word>> grammarList = new MutableLiveData<>();
+    private MutableLiveData<String> error = new MutableLiveData<>();
     private MutableLiveData<Integer> currentPosition = new MutableLiveData<>(1);
 
     public VocabularyViewModel(DatabaseReference databaseReference) {
@@ -35,24 +36,26 @@ MediaPlayer mediaPlayer = new MediaPlayer();
         this.mDatabase = databaseReference;
         loadWord("Vocab"); // Load vocabulary words
         loadWord("Grammar"); // Load grammar words
-        }
-
+    }
 
 
     public LiveData<List<Word>> getVocabularyList() {
         return vocabularyList;
     }
-     public LiveData<List<Word>> getGrammarList() {
-         return grammarList;
-     }
 
-     private LiveData<String> getError() {
-         return error;
-     }
+    public LiveData<List<Word>> getGrammarList() {
+        return grammarList;
+    }
 
-    public LiveData<Integer> getCurrentPosition() {return currentPosition; }
+    private LiveData<String> getError() {
+        return error;
+    }
 
-    void loadWord(String type) { // Load vocabulary and grammar words if wordType is "vocab" or "vocab")
+    public LiveData<Integer> getCurrentPosition() {
+        return currentPosition;
+    }
+
+    public void loadWord(String type) { // Load vocabulary and grammar words if wordType is "vocab" or "vocab")
         Log.d(TAG, "Loading words from Firebase for type: " + type);
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("word");
 
@@ -100,19 +103,20 @@ MediaPlayer mediaPlayer = new MediaPlayer();
 
         audioRef.getDownloadUrl().addOnSuccessListener(uri -> {
             mediaPlayer = new MediaPlayer();
-        try {
-            mediaPlayer.setDataSource(uri.toString());
-            mediaPlayer.prepare();
-            mediaPlayer.start();
-        } catch (Exception e) {
-            e.printStackTrace();
-            Log.e("LearningVocabulary", "Failed to load audio", e);
-        }
+            try {
+                mediaPlayer.setDataSource(uri.toString());
+                mediaPlayer.prepare();
+                mediaPlayer.start();
+            } catch (Exception e) {
+                e.printStackTrace();
+                Log.e("LearningVocabulary", "Failed to load audio", e);
+            }
         }).addOnFailureListener(e -> {
             error.setValue("Failed to load audio: " + e.getMessage());
             Log.e(TAG, "Failed to load audio: " + e.getMessage());
         });
     }
+
     protected void onCleared() {
         super.onCleared();
         if (mediaPlayer != null) {
@@ -120,6 +124,7 @@ MediaPlayer mediaPlayer = new MediaPlayer();
             mediaPlayer = null;
         }
     }
+}
 
-     }
+
 

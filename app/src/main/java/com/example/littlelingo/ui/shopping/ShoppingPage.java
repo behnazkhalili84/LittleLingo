@@ -56,7 +56,7 @@ public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle sa
 
         // Make network request
         Call<PaymentIntentResponse> call = apiService.createPaymentIntent(
-                "Bearer sk_test_51PXtLyDaLkoIps9pRiStHFkHpyiYYC2KsPEMyLrQhtLkRj8x6uWnznBEowGrzE6ON7eeODAhzUMF4s1zq0MPzhHH00e1jqDzSL",
+                "Bearer pk_test_51PXtLyDaLkoIps9pdltuFN4mhpc41kuZOAh2Y9wasAdvDepYacQxZ0y6uxB5JsvH3drStpoFWDVACETz4niPPfwu00S76Byt0o",
                 request
         );
 

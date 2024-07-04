@@ -1,9 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
-<!--    xmlns:tools="http://schemas.android.com/tools"-->
-<!--    android:layout_width="match_parent"-->
-<!--    android:layout_height="match_parent"-->
-<!--    tools:context=".ui.learningvocabulary.LearningVocabulary">-->
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
@@ -16,7 +11,8 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="16dp"
+        >
 
         <TextView
             android:id="@+id/tv_wordname"
@@ -26,7 +22,7 @@
             android:gravity="center"
             android:textColor="#363A43"
             android:textSize="22sp"
-            tools:text="Apple" />
+            tools:text="A" />
 
         <ImageView
             android:id="@+id/iv_image"
@@ -34,7 +30,7 @@
             android:layout_height="300dp"
             android:layout_marginTop="16dp"
             android:contentDescription="@string/image"
-            tools:src="@drawable/apple" />
+            tools:src="@drawable/aimage" />
 
         <LinearLayout
             android:id="@+id/ll_progress_details"
@@ -67,7 +63,7 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/tv_exampleSentence"
+            android:id="@+id/tv_example1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
@@ -76,7 +72,33 @@
             android:padding="15dp"
             android:textColor="#7A8089"
             android:textSize="18sp"
-            tools:text="Apple is a delicious fruit"
+            android:text="@string/alligator"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/tv_example2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@color/teal_200"
+            android:gravity="center"
+            android:padding="15dp"
+            android:textColor="#7A8089"
+            android:textSize="18sp"
+           android:text="@string/apple"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/tv_example3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@color/teal_200"
+            android:gravity="center"
+            android:padding="15dp"
+            android:textColor="#7A8089"
+            android:textSize="18sp"
+            android:text="@string/ant"
             android:textStyle="bold"/>
 
         <com.google.android.material.button.MaterialButton
@@ -84,7 +106,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:backgroundTint="@color/teal_200"
+            android:backgroundTint="#0EF3DC"
             android:textColor="@color/white"
             android:textSize="18sp"
             android:textStyle="bold"
@@ -94,42 +116,39 @@
             app:iconPadding="8dp"
             app:iconSize="24dp" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="10dp">
+
+        <Button
+            android:id="@+id/btn_back"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:padding="5dp">
+            android:layout_margin="10dp"
+            android:background="@color/teal_700"
+            android:text="@string/back"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
 
-            <Button
-                android:id="@+id/btn_back"
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:background="@color/teal_700"
-                android:text="@string/back"
-                android:textColor="@android:color/white"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-            <Space
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
-
-            <Button
-                android:id="@+id/btn_next"
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:background="@color/teal_700"
-                android:text="@string/next"
-                android:textColor="@android:color/white"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-
-
-        </LinearLayout>
+        <Button
+            android:id="@+id/btn_next"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@color/teal_700"
+            android:text="@string/next"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+    </LinearLayout>
 
     </LinearLayout>
 </ScrollView>

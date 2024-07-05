@@ -3,12 +3,17 @@ package com.example.littlelingo.ui.VocabularyResult;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import com.example.littlelingo.API.MailgunService;
+import com.example.littlelingo.MainActivity;
 import com.example.littlelingo.R;
 
 import java.io.IOException;
@@ -25,6 +30,7 @@ public class ResultVocabulary extends AppCompatActivity {
 
         TextView tvScore = findViewById(R.id.tv_score);
         TextView tvUsername = findViewById(R.id.tv_name);
+        Button btnFinish = findViewById(R.id.btn_finish);
 
         // Get the score and username from the Intent
         Intent intent = getIntent();
@@ -40,6 +46,16 @@ public class ResultVocabulary extends AppCompatActivity {
 
         // Send the quiz result via email using Mailgun
         sendEmail(username, score);
+        btnFinish.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Navigate to the home_nav destination
+                Intent intent = new Intent(ResultVocabulary.this, MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                finish();
+            }
+        });
     }
 
     private void sendEmail(String username, int score) {

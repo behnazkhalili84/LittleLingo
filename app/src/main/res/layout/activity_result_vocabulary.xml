@@ -7,7 +7,7 @@
     android:orientation="vertical"
     android:gravity="center_horizontal"
     android:padding="20dp"
-    tools:context=".ui.resultVocabulary.ResultVocabulary">
+    tools:context=".ui.VocabularyResult.ResultVocabulary">
 
     <TextView
         android:id="@+id/tv_result"

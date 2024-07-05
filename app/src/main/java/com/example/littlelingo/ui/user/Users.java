@@ -11,7 +11,7 @@ public class Users {
     private String nativeLanguage;
     private String imageLink;
     private String dateOfBirth; // Format: YYYY-MM-DD
-    private Map<String, Integer> scores; // Map to store scores with unique IDs
+    private Map<String, Map<String, Object>> scores; // Change to Map<String, Map<String, Object>>
 
     // Default constructor required for calls to DataSnapshot.getValue(User.class)
     public Users() {
@@ -72,17 +72,16 @@ public class Users {
         this.dateOfBirth = dateOfBirth;
     }
 
-    public Map<String, Integer> getScores() {
+    public Map<String, Map<String, Object>> getScores() {
         return scores;
     }
 
-    public void setScores(Map<String, Integer> scores) {
+    public void setScores(Map<String, Map<String, Object>> scores) {
         this.scores = scores;
     }
 
-    // Method to add a score
-    public void addScore(String scoreId, int score) {
-        this.scores.put(scoreId, score);
+    public void addScoreDetail(String key, Map<String, Object> scoreDetail) {
+        this.scores.put(key, scoreDetail);
     }
 
     public String getEmail() {
@@ -113,4 +112,3 @@ public class Users {
                 '}';
     }
 }
-

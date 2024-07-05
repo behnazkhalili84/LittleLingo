@@ -4,6 +4,7 @@ import static androidx.fragment.app.FragmentManager.TAG;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,12 +24,16 @@ import com.example.littlelingo.SignInActivity;
 import com.example.littlelingo.databinding.FragmentProfileBinding;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.ViewModelProvider;
+import com.bumptech.glide.Glide;
+import java.io.ByteArrayOutputStream;
 
 
 public class ProfileFragment extends Fragment {
@@ -36,12 +41,14 @@ public class ProfileFragment extends Fragment {
     private AuthViewModel authViewModel;
     private ImageView profileImageView;
     private FloatingActionButton editImageButton;
+    private Uri imageUri;
 
     // Register the activity result launcher for camera and gallery intents
     private final ActivityResultLauncher<String> getContent = registerForActivityResult(new ActivityResultContracts.GetContent(), new ActivityResultCallback<Uri>() {
         @Override
         public void onActivityResult(Uri uri) {
             if (uri != null) {
+                imageUri = uri;
                 profileImageView.setImageURI(uri);
             }
         }
@@ -52,6 +59,7 @@ public class ProfileFragment extends Fragment {
         public void onActivityResult(Bitmap bitmap) {
             if (bitmap != null) {
                 profileImageView.setImageBitmap(bitmap);
+                imageUri = getImageUriFromBitmap(bitmap);
             }
         }
     });
@@ -86,6 +94,13 @@ public class ProfileFragment extends Fragment {
                 String[] options = {"Take Photo", "Choose from Gallery"};
                 AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
                 builder.setTitle("Edit Profile Picture");
+                usernameEditText.setEnabled(true);
+                emailEditText.setEnabled(true);
+                ageEditText.setEnabled(true);
+                nativeLangEditText.setEnabled(true);
+                saveButton.setVisibility(View.VISIBLE);
+                cancelButton.setVisibility(View.VISIBLE);
+                editButton.setVisibility(View.GONE);
                 builder.setItems(options, (dialog, which) -> {
                     switch (which) {
                         case 0:
@@ -108,6 +123,9 @@ public class ProfileFragment extends Fragment {
                 Log.d(TAG, "onClick: "+ user.toString());
                 ageEditText.setText(String.valueOf(user.getAge()));
                 nativeLangEditText.setText(user.getNativeLanguage());
+                if (user.getImageLink() != null && !user.getImageLink().isEmpty()) {
+                    Glide.with(this).load(user.getImageLink()).into(profileImageView);
+                }
 
             }
         });
@@ -137,6 +155,11 @@ public class ProfileFragment extends Fragment {
 
                 Users updatedUser = new Users(authViewModel.getUserLiveData().getValue().getUserId(), updatedUsername, updatedEmail, Integer.parseInt(updatedAge), updatedNativeLang, authViewModel.getUserLiveData().getValue().getDateOfBirth());
                 authViewModel.updateUser(updatedUser);
+
+                // Save the image to Firebase Storage and update the database with the image URL
+                if (imageUri != null) {
+                    saveImageToFirebaseStorage(imageUri, updatedUser);
+                }
 
                 usernameEditText.setEnabled(false);
                 emailEditText.setEnabled(false);
@@ -194,5 +217,26 @@ public class ProfileFragment extends Fragment {
 
 
         return view;
+    }
+
+    private Uri getImageUriFromBitmap(Bitmap bitmap) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(getActivity().getContentResolver(), bitmap, "ProfileImage", null);
+        return Uri.parse(path);
+    }
+
+    private void saveImageToFirebaseStorage(Uri imageUri, Users user) {
+        StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+        StorageReference profileImageRef = storageRef.child("usersImages/" + user.getUserId() + ".jpg");
+
+        profileImageRef.putFile(imageUri).addOnSuccessListener(taskSnapshot -> {
+            profileImageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                user.setImageLink(uri.toString());
+                authViewModel.updateUser(user);
+            });
+        }).addOnFailureListener(e -> {
+            Log.e(TAG, "Failed to upload image to Firebase Storage", e);
+        });
     }
 }

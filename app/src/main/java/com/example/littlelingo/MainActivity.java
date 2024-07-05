@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
                 getApplicationContext(),
                 "your-publishable-key-from-stripe"
         );
-       
+
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
 

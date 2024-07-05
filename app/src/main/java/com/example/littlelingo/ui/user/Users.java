@@ -9,6 +9,7 @@ public class Users {
     private String email;
     private int age;
     private String nativeLanguage;
+    private String imageLink;
     private String dateOfBirth; // Format: YYYY-MM-DD
     private Map<String, Integer> scores; // Map to store scores with unique IDs
 
@@ -27,6 +28,7 @@ public class Users {
         this.nativeLanguage = nativeLanguage;
         this.dateOfBirth = dateOfBirth;
         this.scores = new HashMap<>();
+        this.imageLink = "";
     }
 
     // Getters and setters
@@ -89,6 +91,13 @@ public class Users {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+    public String getImageLink() {
+        return imageLink;
+    }
+
+    public void setImageLink(String imageLink) {
+        this.imageLink = imageLink;
     }
 
     @Override

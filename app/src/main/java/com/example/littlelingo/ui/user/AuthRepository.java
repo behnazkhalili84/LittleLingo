@@ -103,6 +103,36 @@ public class AuthRepository {
         loggedOutLiveData.postValue(true);
     }
 
+    public void deleteAccount(){
+        FirebaseUser user = firebaseAuth.getCurrentUser();
+        if (user != null) {
+            String userId = user.getUid();
+            user.delete().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    // Account deleted from Firebase Authentication
+                    deleteUserData(userId);
+                } else {
+                    // Handle failure
+                    authError = task.getException().getMessage();
+                }
+            });
+        }
+    }
+
+    private void deleteUserData(String userId) {
+        databaseReference.child("users").child(userId).removeValue().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                // Data deleted from Realtime Database
+                userLiveData.postValue(null);
+                loggedOutLiveData.postValue(true);
+            } else {
+                // Handle failure
+                authError = task.getException().getMessage();
+            }
+        });
+    }
+
+
     //Getters
     public LiveData<Users> getUserLiveData(){
         return userLiveData;

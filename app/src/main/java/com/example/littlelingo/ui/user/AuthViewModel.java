@@ -15,6 +15,11 @@ public class AuthViewModel extends ViewModel {
     private  AuthRepository authRepository; // user auth model
     private LiveData<Users> userLiveData;
     private LiveData<Boolean> loggedoutLiveData;
+
+    public String getAuthError() {
+        return authError;
+    }
+
     public String authError;
 
 
@@ -77,6 +82,11 @@ public class AuthViewModel extends ViewModel {
 
     public void updateUser(Users user) {
         authRepository.updateUser(user);
+    }
+
+    public void deleteAccount() {
+        authRepository.deleteAccount();
+        userLiveData = authRepository.getUserLiveData();
     }
 
     //Getters

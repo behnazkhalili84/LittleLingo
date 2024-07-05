@@ -50,7 +50,7 @@ public class SignInActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sign_in);
 
         authViewModel = new ViewModelProvider(this).get(AuthViewModel.class);
-authViewModel.signOut();
+//authViewModel.signOut();
 
         userNameEditText = findViewById(R.id.UserName);
         passwordEditText = findViewById(R.id.password);
@@ -90,6 +90,21 @@ authViewModel.signOut();
                 String email = userNameEditText.getText().toString().trim();
                 String password = passwordEditText.getText().toString().trim();
                 authViewModel.login(email, password);
+
+                authViewModel.getUserLiveData().observe(SignInActivity.this, user -> {
+                    if(user != null){
+                        Toast.makeText(SignInActivity.this,"Sign In Successful", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(SignInActivity.this, MainActivity.class);
+                        intent.putExtra("name",user.getName());
+                        intent.putExtra("userID",user.getUserId());
+                        //Toast.makeText(SignInActivity.this,"Sign In Intent: "+ intent.getStringExtra("name"), Toast.LENGTH_SHORT).show();
+
+                        startActivity(intent);
+                        finish();
+                    } else {
+                        Toast.makeText(SignInActivity.this,"Sign In Fails: "+ authViewModel.authError, Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
 
@@ -115,20 +130,7 @@ authViewModel.signOut();
             }
         });
 
-        authViewModel.getUserLiveData().observe(this, user -> {
-            if(user != null){
-                Toast.makeText(SignInActivity.this,"Sign In Successful", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(SignInActivity.this, MainActivity.class);
-                intent.putExtra("name",user.getName());
-                intent.putExtra("userID",user.getUserId());
-                //Toast.makeText(SignInActivity.this,"Sign In Intent: "+ intent.getStringExtra("name"), Toast.LENGTH_SHORT).show();
-
-                startActivity(intent);
-                finish();
-            } else {
-                Toast.makeText(SignInActivity.this,"Sign In Fails: "+ authViewModel.authError, Toast.LENGTH_SHORT).show();
-            }
-        });
+//
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());

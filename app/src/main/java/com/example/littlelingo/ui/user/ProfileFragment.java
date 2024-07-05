@@ -21,6 +21,7 @@ import androidx.annotation.Nullable;
 
 import com.example.littlelingo.R;
 import com.example.littlelingo.SignInActivity;
+import com.example.littlelingo.SignUpActivity;
 import com.example.littlelingo.databinding.FragmentProfileBinding;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
@@ -181,14 +182,12 @@ public class ProfileFragment extends Fragment {
                     if (user != null) {
                         usernameEditText.setText(user.getName());
                         emailEditText.setText(user.getEmail());
-
                         ageEditText.setText(user.getAge());
                         nativeLangEditText.setText(user.getNativeLanguage());
                     }
                 });
                 usernameEditText.setEnabled(false);
                 emailEditText.setEnabled(false);
-
                 ageEditText.setEnabled(false);
                 nativeLangEditText.setEnabled(false);
                 saveButton.setVisibility(View.GONE);
@@ -204,13 +203,22 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                // delete logic here
+                try {
+                    authViewModel.deleteAccount();
+                    Toast.makeText(getContext(), "Account deleted Successfully", Toast.LENGTH_SHORT).show();
 
-                // Navigate to sign-in screen or close the app
-                Intent intent = new Intent(getActivity(), SignInActivity.class);
-                startActivity(intent);
-                if (getActivity() != null) {
-                    getActivity().finish();
+                    // Navigate to sign-in screen or close the app
+                    Intent intent = new Intent(getActivity(), SignInActivity.class);
+                    startActivity(intent);
+                    if (getActivity() != null) {
+                        getActivity().finish();
+                    }
+                } catch (IllegalStateException e) {
+                    Log.e("SetupError", "Setup parameters do not exist!", e);
+                    throw e; // Rethrow the exception if needed
+                } catch (Exception e) {
+                    Log.e("SetupError", "An unexpected error occurred during setup", e);
+                    throw e; // Rethrow the exception if needed
                 }
             }
         });

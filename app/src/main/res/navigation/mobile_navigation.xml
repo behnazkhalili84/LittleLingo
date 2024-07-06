@@ -35,6 +35,12 @@
         android:label="Grammar Quiz"
         tools:layout="@layout/fragment_grammar_quiz">
     </fragment>
+    <fragment
+        android:id="@+id/nav_resultReport"
+        android:name="com.example.littlelingo.ui.resultreport.ResultReport"
+        android:label="Result Report"
+        tools:layout="@layout/fragment_vocabulary_quiz">
+    </fragment>
 
     <fragment
         android:id="@+id/nav_shopping"

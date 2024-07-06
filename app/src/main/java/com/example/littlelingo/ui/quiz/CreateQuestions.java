@@ -1,6 +1,5 @@
 package com.example.littlelingo.ui.quiz;
 
-import com.example.littlelingo.ui.vocabularyquiz.VocabularyQuestion;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 

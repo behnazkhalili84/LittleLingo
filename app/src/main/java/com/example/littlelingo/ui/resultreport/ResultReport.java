@@ -2,65 +2,100 @@ package com.example.littlelingo.ui.resultreport;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.example.littlelingo.R;
+import com.example.littlelingo.ui.SharedViewModel;
+import com.example.littlelingo.ui.user.AuthRepository;
+import com.example.littlelingo.ui.user.Users;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link ResultReport#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class ResultReport extends Fragment {
+import java.util.Map;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+public class ResultReport  extends Fragment {
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private LinearLayout resultContainer;
+    private AuthRepository authRepository;
+    private SharedViewModel sharedViewModel;
+    private String userId;
+    private String username;
 
-    public ResultReport() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ResultReport.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static ResultReport newInstance(String param1, String param2) {
-        ResultReport fragment = new ResultReport();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_result_report, container, false);
+        resultContainer = view.findViewById(R.id.resultContainer);
+        // Initialize SharedViewModel
+        sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
+        // Observe SharedViewModel data
+        sharedViewModel.getName().observe(getViewLifecycleOwner(), new Observer<String>() {
+            @Override
+            public void onChanged(String name) {
+                username = name;
+                Log.d("VocabularyQuiz", "Username from ViewModel: " + username);
+            }
+        });
+        sharedViewModel.getUserID().observe(getViewLifecycleOwner(), new Observer<String>() {
+            @Override
+            public void onChanged(String id) {
+                userId = id;
+                Log.d("VocabularyQuiz", "UserID from ViewModel: " + userId);
+            }
+        });
+        return view;
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        // Initialize AuthRepository
+        authRepository = new AuthRepository();
+
+        authRepository.getUserLiveData().observe(getViewLifecycleOwner(), new Observer<Users>() {
+            @Override
+            public void onChanged(Users user) {
+                if (user != null) {
+                    Log.d("ResultReportFragment", "User data: " + user);
+                    displayQuizResults(user.getScores());
+                }
+            }
+        });
+
+        // Fetch user data
+        authRepository.fetchUserData(userId);
+    }
+
+    private void displayQuizResults(Map<String, Map<String, Object>> scores) {
+        resultContainer.removeAllViews();
+        for (Map.Entry<String, Map<String, Object>> entry : scores.entrySet()) {
+            Map<String, Object> quizResult = entry.getValue();
+            View quizResultView = createQuizResultView(quizResult);
+            resultContainer.addView(quizResultView);
         }
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_result_report, container, false);
+    private View createQuizResultView(Map<String, Object> quizResult) {
+        View view = LayoutInflater.from(getContext()).inflate(R.layout.item_quiz_result, resultContainer, false);
+        TextView quizTypeTextView = view.findViewById(R.id.quizTypeTextView);
+        TextView totalQuestionsTextView = view.findViewById(R.id.totalQuestionsTextView);
+        TextView correctAnswersTextView = view.findViewById(R.id.correctAnswersTextView);
+        TextView dateOfQuizTextView = view.findViewById(R.id.dateOfQuizTextView);
+
+        quizTypeTextView.setText("Quiz Type: " + quizResult.get("quizType"));
+        totalQuestionsTextView.setText("Total Questions: " + quizResult.get("totalQuestions"));
+        correctAnswersTextView.setText("Correct Answers: " + quizResult.get("correctAnswers"));
+        dateOfQuizTextView.setText("Date: " + quizResult.get("dateOfQuiz"));
+        return view;
     }
-}
+    }

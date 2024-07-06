@@ -79,7 +79,7 @@ public class AuthRepository {
         });
     }
 
-    private void fetchUserData(String userId) {
+    public void fetchUserData(String userId) {
         databaseReference.child("users").child(userId).get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 DataSnapshot snapshot = task.getResult();

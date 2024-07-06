@@ -9,6 +9,8 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="16dp">
+
         <!-- Results will be added here dynamically -->
+
     </LinearLayout>
 </ScrollView>

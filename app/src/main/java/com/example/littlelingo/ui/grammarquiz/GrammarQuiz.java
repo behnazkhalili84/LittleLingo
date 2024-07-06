@@ -23,7 +23,6 @@ import com.example.littlelingo.ui.SharedViewModel;
 import com.example.littlelingo.ui.VocabularyResult.ResultVocabulary;
 import com.example.littlelingo.ui.quiz.Questions;
 import com.example.littlelingo.ui.quiz.QuizViewModel;
-import com.example.littlelingo.ui.vocabularyquiz.VocabularyQuestion;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;

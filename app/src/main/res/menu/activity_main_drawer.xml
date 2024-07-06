@@ -22,19 +22,18 @@
             android:icon="@drawable/quiz_24"
             android:title="@string/vocabulary_quiz"/>
 
-        <item
-                android:id="@+id/nav_slideshow"
-                android:icon="@drawable/ic_menu_slideshow"
-                android:title="@string/menu_slideshow"/>
-
-        <item
-            android:id="@+id/nav_shopping"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="@string/store"/>
+<!--        <item-->
+<!--            android:id="@+id/nav_shopping"-->
+<!--            android:icon="@drawable/ic_menu_slideshow"-->
+<!--            android:title="@string/store"/>-->
         <item
             android:id="@+id/nav_grammarquiz"
             android:icon="@drawable/ic_menu_slideshow"
             android:title="@string/grammar_quiz"/>
+        <item
+            android:id="@+id/nav_resultReport"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="@string/result_report"/>
         <item
             android:id="@+id/nav_profile"
             android:icon="@drawable/baseline_account_circle_24"

@@ -31,9 +31,7 @@ import java.util.Set;
 import com.example.littlelingo.R;
 import com.example.littlelingo.ui.SharedViewModel;
 import com.example.littlelingo.ui.VocabularyResult.ResultVocabulary;
-import com.example.littlelingo.ui.user.AuthRepository;
-import com.example.littlelingo.ui.user.Users;
-import com.example.littlelingo.ui.user.Users;
+import com.example.littlelingo.ui.quiz.Questions;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -52,13 +50,12 @@ public class VocabularyQuiz extends Fragment {
 
     private DatabaseReference mDatabase;
     private SharedViewModel sharedViewModel;
-    private List<VocabularyQuestion> questionsList = new ArrayList<>();
+    private List<Questions> questionsList = new ArrayList<>();
     private Set<String> askedQuestionIds = new HashSet<>();
     private int currentQuestionIndex = 0;
     private int selectedOptionPosition = 0;
     private boolean isAnswerSubmitted = false;
     private int currentScore = 0; // Initialize currentScore
-    private VocabularyQuizViewModel viewModel;
     private String userId;
     private String username;
 
@@ -145,25 +142,25 @@ public class VocabularyQuiz extends Fragment {
     }
 
     private void checkAnswer() {
-        VocabularyQuestion currentQuestion = questionsList.get(currentQuestionIndex);
+        Questions currentQuestion = questionsList.get(currentQuestionIndex);
         String correctAnswer = currentQuestion.getCorrectAnswer();
         int correctAnswerPosition = getCorrectAnswerPosition(currentQuestion, correctAnswer);
 
         if (selectedOptionPosition == correctAnswerPosition) {
             showAnswerFeedback(correctAnswerPosition, R.drawable.correct_option_border_bg);
-            Toast.makeText(getContext(), "Correct!", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getContext(), "Correct!", Toast.LENGTH_SHORT).show();
             currentScore++; // Increment the score if the answer is correct
             Log.d("VocabularyQuiz", "Score incremented: " + currentScore); // Debug log
         } else {
             showAnswerFeedback(correctAnswerPosition, R.drawable.correct_option_border_bg);
             showAnswerFeedback(selectedOptionPosition, R.drawable.wrong_option_border_bg);
-            Toast.makeText(getContext(), "Wrong!", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getContext(), "Wrong!", Toast.LENGTH_SHORT).show();
         }
 
         currentQuestionIndex++;
     }
 
-    private int getCorrectAnswerPosition(VocabularyQuestion question, String correctAnswer) {
+    private int getCorrectAnswerPosition(Questions question, String correctAnswer) {
         if (correctAnswer.equals(question.getOptionOne())) return 1;
         if (correctAnswer.equals(question.getOptionTwo())) return 2;
         if (correctAnswer.equals(question.getOptionThree())) return 3;
@@ -190,7 +187,7 @@ public class VocabularyQuiz extends Fragment {
 
     private void loadNextQuestion() {
         resetSelectedOption();
-        VocabularyQuestion nextQuestion = questionsList.get(currentQuestionIndex);
+        Questions nextQuestion = questionsList.get(currentQuestionIndex);
         shuffleOptions(nextQuestion);
         tvQuestion.setText("What is it?");
         Picasso.get().load(nextQuestion.getImage()).into(ivImage);
@@ -202,7 +199,7 @@ public class VocabularyQuiz extends Fragment {
         progressBar.setProgress((currentQuestionIndex + 1) * 100 / questionsList.size());
     }
 
-    private void shuffleOptions(VocabularyQuestion question) {
+    private void shuffleOptions(Questions question) {
         List<String> options = new ArrayList<>();
         options.add(question.getOptionOne());
         options.add(question.getOptionTwo());
@@ -227,10 +224,10 @@ public class VocabularyQuiz extends Fragment {
         mDatabase.orderByChild("questionType").equalTo("vocabulary").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                List<VocabularyQuestion> allQuestions = new ArrayList<>();
+                List<Questions> allQuestions = new ArrayList<>();
 
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    VocabularyQuestion question = snapshot.getValue(VocabularyQuestion.class);
+                    Questions question = snapshot.getValue(Questions.class);
                     allQuestions.add(question);
                     // Log the data fetched
                     Log.d("VocabularyQuiz", "Question fetched: " + question);
@@ -241,7 +238,7 @@ public class VocabularyQuiz extends Fragment {
                     return;
                 }
 
-                List<VocabularyQuestion> selectedQuestions = getRandomQuestions(allQuestions, 8);
+                List<Questions> selectedQuestions = getRandomQuestions(allQuestions, 8);
 
                 questionsList.addAll(selectedQuestions);
 
@@ -257,13 +254,13 @@ public class VocabularyQuiz extends Fragment {
         });
     }
 
-    private List<VocabularyQuestion> getRandomQuestions(List<VocabularyQuestion> allQuestions, int count) {
-        List<VocabularyQuestion> selectedQuestions = new ArrayList<>();
+    private List<Questions> getRandomQuestions(List<Questions> allQuestions, int count) {
+        List<Questions> selectedQuestions = new ArrayList<>();
         Random random = new Random();
 
         while (selectedQuestions.size() < count && selectedQuestions.size() < allQuestions.size()) {
             int index = random.nextInt(allQuestions.size());
-            VocabularyQuestion randomQuestion = allQuestions.get(index);
+            Questions randomQuestion = allQuestions.get(index);
 
             if (!askedQuestionIds.contains(String.valueOf(randomQuestion.getId()))) {
                 selectedQuestions.add(randomQuestion);
@@ -305,156 +302,4 @@ public class VocabularyQuiz extends Fragment {
         userScoresRef.child(scoreId).setValue(scoreDetails);
     }
 
-
-
-
-    private void addQuestions() {
-//
-///Question1
-        VocabularyQuestion vocabularyQuestion1 = new VocabularyQuestion(1, "https://firebasestorage.googleapis.com/v0/b/littlelingo-6bcce.appspot.com/o/apple.jpeg?alt=media&token=6e2a3e1b-ccd6-4997-b2bb-2fa849e48d4a",
-                "drink", "water",
-                "apple", "nose", "3","vocabulary");
-
-        // Add the word to the database
-        mDatabase.child("1").setValue(vocabularyQuestion1);
-
-        ///Question2
-
-        VocabularyQuestion vocabularyQuestion2 = new VocabularyQuestion(2, "https://firebasestorage.googleapis.com/v0/b/littlelingo-6bcce.appspot.com/o/water.jpeg?alt=media&token=2b543b26-4443-44fa-adf8-1dc2697d1128",
-                "juice", "water",
-                "apple", "nose", "2","vocabulary");
-
-        // Add the word to the database
-        mDatabase.child("2").setValue(vocabularyQuestion2);
-
-        ///Question3
-        VocabularyQuestion vocabularyQuestion3 = new VocabularyQuestion(3, "https://firebasestorage.googleapis.com/v0/b/littlelingo-6bcce.appspot.com/o/juice.jpeg?alt=media&token=8bd7359a-1318-4b40-b1e6-3385e1e2efa3",
-                "juice", "water",
-                "apple", "nose", "1","vocabulary");
-
-        // Add the word to the database
-        mDatabase.child("3").setValue(vocabularyQuestion3);
-
-        ///Question4
-
-        VocabularyQuestion vocabularyQuestion4 = new VocabularyQuestion(4, "https://firebasestorage.googleapis.com/v0/b/littlelingo-6bcce.appspot.com/o/drink.jpeg?alt=media&token=9c739bc7-d501-4cbf-894c-c9bf77fc5ca8",
-                "juice", "water",
-                "drink", "nose", "3","vocabulary");
-
-        // Add the word to the database
-        mDatabase.child("4").setValue(vocabularyQuestion4);
-
-        ///Question5
-        VocabularyQuestion vocabularyQuestion5 = new VocabularyQuestion(5, "https://firebasestorage.googleapis.com/v0/b/littlelingo-6bcce.appspot.com/o/toes.jpeg?alt=media&token=336ab8d1-3f5a-4007-8135-2563fabbb834",
-                "Toes", "water",
-                "drink", "nose", "1","vocabulary");
-
-        // Add the word to the database
-        mDatabase.child("5").setValue(vocabularyQuestion5);
-
-        ///Question6
-
-        VocabularyQuestion vocabularyQuestion6 = new VocabularyQuestion(6, "https://firebasestorage.googleapis.com/v0/b/littlelingo-6bcce.appspot.com/o/nose.ogg?alt=media&token=1ea4d054-b872-4f7a-8749-afdf552ee021",
-                "Noes", "Toes",
-                "water", "drink", "1","vocabulary");
-
-        // Add the word to the database
-        mDatabase.child("6").setValue(vocabularyQuestion6);
-
-        ///Question7
-
-        VocabularyQuestion vocabularyQuestion7 = new VocabularyQuestion(7, "https://firebasestorage.googleapis.com/v0/b/littlelingo-6bcce.appspot.com/o/biscuit.jpeg?alt=media&token=76f5c488-665b-4045-8c12-7b2eaaee2a6c",
-                "biscuit", "milk",
-                "water", "apple", "1","vocabulary");
-
-        // Add the word to the database
-        mDatabase.child("7").setValue(vocabularyQuestion7);
-
-        ///Question8
-
-        VocabularyQuestion vocabularyQuestion8 = new VocabularyQuestion(8, "https://firebasestorage.googleapis.com/v0/b/littlelingo-6bcce.appspot.com/o/chair.jpeg?alt=media&token=78c4ba05-6b13-4cfe-83df-bb7c6ef2ea6e",
-                "cup", "drink",
-                "chair", "plate", "3","vocabulary");
-
-        // Add the word to the database
-        mDatabase.child("8").setValue(vocabularyQuestion8);
-
-        ///Question9
-        VocabularyQuestion vocabularyQuestion9 = new VocabularyQuestion(9, "https://firebasestorage.googleapis.com/v0/b/littlelingo-6bcce.appspot.com/o/cup.jpeg?alt=media&token=c4142c8b-14e0-4619-b597-03a25f72e23d",
-                "cup", "plate",
-                "chair", "nose", "1","vocabulary");
-
-        // Add the word to the database
-        mDatabase.child("9").setValue(vocabularyQuestion9);
-
-        ///Question10
-        VocabularyQuestion vocabularyQuestion10 = new VocabularyQuestion(10, "https://firebasestorage.googleapis.com/v0/b/littlelingo-6bcce.appspot.com/o/dady.jpeg?alt=media&token=06f91ba9-d230-4aa7-9cf6-8348b086d1b4",
-                "daddy", "mommy",
-                "cup", "plate", "1","vocabulary");
-
-        // Add the word to the database
-        mDatabase.child("10").setValue(vocabularyQuestion10);
-
-        ///Question11
-        VocabularyQuestion vocabularyQuestion11 = new VocabularyQuestion(11, "https://firebasestorage.googleapis.com/v0/b/littlelingo-6bcce.appspot.com/o/milk.jpeg?alt=media&token=2eb78a24-4efb-4505-8d92-59ccfa9fb4f8",
-                "cup", "nose",
-                "water", "milk", "4","vocabulary");
-
-        // Add the word to the database
-        mDatabase.child("11").setValue(vocabularyQuestion11);
-
-        ///Question12
-        VocabularyQuestion vocabularyQuestion12 = new VocabularyQuestion(12, "https://firebasestorage.googleapis.com/v0/b/littlelingo-6bcce.appspot.com/o/mommy.jpeg?alt=media&token=77ebd833-56db-4c37-8db3-2b8243aa8890",
-                "daddy", "mommy",
-                "cup", "plate", "2","vocabulary");
-
-        // Add the word to the database
-        mDatabase.child("12").setValue(vocabularyQuestion12);
-
-        ///Question13
-        VocabularyQuestion vocabularyQuestion13 = new VocabularyQuestion(13, "https://firebasestorage.googleapis.com/v0/b/littlelingo-6bcce.appspot.com/o/mouth.jpeg?alt=media&token=8501e6bb-1943-4d47-9d1d-337d4823668f",
-                "Noes", "Toes",
-                "mouth", "sweet", "3","vocabulary");
-
-        // Add the word to the database
-        mDatabase.child("13").setValue(vocabularyQuestion13);
-
-        ///Question14
-        VocabularyQuestion vocabularyQuestion14 = new VocabularyQuestion(14, "https://firebasestorage.googleapis.com/v0/b/littlelingo-6bcce.appspot.com/o/plate.png?alt=media&token=503c43cb-95d8-4413-9e19-7c85e2285be5",
-                "noes", "toes",
-                "plate", "cup", "3","vocabulary");
-
-        // Add the word to the database
-        mDatabase.child("14").setValue(vocabularyQuestion14);
-
-        ///Question15
-        VocabularyQuestion vocabularyQuestion15 = new VocabularyQuestion(15, "https://firebasestorage.googleapis.com/v0/b/littlelingo-6bcce.appspot.com/o/sweets.jpeg?alt=media&token=f44bc33e-4108-488d-abf8-6a52125e29c8",
-                "Noes", "Toes",
-                "water", "drink", "1","vocabulary");
-
-        // Add the word to the database
-        mDatabase.child("15").setValue(vocabularyQuestion15);
-
-        ///Question16
-        VocabularyQuestion vocabularyQuestion16 = new VocabularyQuestion(16, "https://firebasestorage.googleapis.com/v0/b/littlelingo-6bcce.appspot.com/o/table.jpeg?alt=media&token=c8169476-cdf1-447c-a51b-82200f69b85b",
-                "Noes", "Toes",
-                "water", "drink", "1","vocabulary");
-
-        // Add the word to the database
-        mDatabase.child("16").setValue(vocabularyQuestion16);
-
-        ///Question16
-        VocabularyQuestion vocabularyQuestion17 = new VocabularyQuestion(17, "https://firebasestorage.googleapis.com/v0/b/littlelingo-6bcce.appspot.com/o/videoplayer.jpg?alt=media&token=fb86ba2a-cd49-4ed7-9383-8793e52aff49",
-                "Media", "Toes",
-                "water", "drink", "1","vocabulary");
-
-        // Add the word to the database
-        mDatabase.child("17").setValue(vocabularyQuestion17);
-    }
 }
-//553b8c2a31b52d4e0c69d9c185d007e3-623e10c8-9148d441
-//sandbox8ca82183ec064960bac4f2195f9eedf4.mailgun.org
-
-//98dda2cf55d65e1c3b2563e7691db22f-623e10c8-720a8c63
-//A new password has been created for postmaster@sandboxad7e3b4966de4c938a90fb863061260a.mailgun.org. Click “Copy” to copy it to the clipboard.
-//

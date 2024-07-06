@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.Menu;
 import android.widget.Toast;
 
+import com.example.littlelingo.ui.quiz.CreateQuestions;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 
@@ -41,6 +42,9 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+//        CreateQuestions createQuestions = new CreateQuestions();
+//        createQuestions.addQuestions();
+
         setSupportActionBar(binding.appBarMain.toolbar);
         PaymentConfiguration.init(
                 getApplicationContext(),
@@ -53,7 +57,8 @@ public class MainActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_vocabularylearning, R.id.nav_vocabulayquiz,R.id.nav_grammarLearning, R.id.sign_out, R.id.nav_shopping, R.id.nav_profile,R.id.nav_shopping)
+                R.id.nav_home, R.id.nav_vocabularylearning, R.id.nav_vocabulayquiz,R.id.nav_grammarLearning, R.id.sign_out
+                , R.id.nav_shopping, R.id.nav_profile,R.id.nav_shopping,R.id.nav_grammarquiz)
 
                 .setOpenableLayout(drawer)
                 .build();

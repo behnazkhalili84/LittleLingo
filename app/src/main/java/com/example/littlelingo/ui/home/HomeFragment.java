@@ -1,5 +1,6 @@
 package com.example.littlelingo.ui.home;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,7 +44,12 @@ public class HomeFragment extends Fragment {
         // Observe data from SharedViewModel
         authViewModel.getUserLiveData().observe(getViewLifecycleOwner(), user -> {
            // Toast.makeText(getContext(), "Name: " + name, Toast.LENGTH_SHORT).show();
-            homeViewModel.setText("Welcome, " + user.getName());
+            homeViewModel.setText("Welcome, " + user.getName()+user.getUserRoll());
+            if ("admin".equals(user.getUserRoll())) {
+                binding.adminLayout.setVisibility(View.VISIBLE);
+            } else {
+                binding.adminLayout.setVisibility(View.GONE);
+            }
         });
 
 //        sharedViewModel.getUserID().observe(getViewLifecycleOwner(), userID -> {
@@ -73,8 +79,7 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        adminimageView = root.findViewById(R.id.adminPage);
-        adminimageView.setOnClickListener(new View.OnClickListener() {
+        binding.adminLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 NavHostFragment.findNavController(HomeFragment.this).navigate(R.id.nav_adminPage);

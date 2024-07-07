@@ -24,6 +24,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.littlelingo.ui.user.AuthViewModel;
+import com.example.littlelingo.ui.user.Users;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
@@ -91,7 +92,7 @@ public class SignInActivity extends AppCompatActivity {
                 String password = passwordEditText.getText().toString().trim();
                 authViewModel.login(email, password);
 
-                authViewModel.getUserLiveData().observe(SignInActivity.this, user -> {
+                Users user = authViewModel.getUserLiveData().getValue();//.observe(SignInActivity.this, user -> {
                     if(user != null){
                         Toast.makeText(SignInActivity.this,"Sign In Successful", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(SignInActivity.this, MainActivity.class);
@@ -104,7 +105,7 @@ public class SignInActivity extends AppCompatActivity {
                     } else {
                         Toast.makeText(SignInActivity.this,"Sign In Fails: "+ authViewModel.authError, Toast.LENGTH_SHORT).show();
                     }
-                });
+              //  });
             }
         });
 

@@ -91,6 +91,7 @@ public class AuthRepository {
                     user.setAge(snapshot.child("age").getValue(Integer.class));
                     user.setNativeLanguage(snapshot.child("nativeLanguage").getValue(String.class));
                     user.setDateOfBirth(snapshot.child("dateOfBirth").getValue(String.class));
+                    user.setUserRoll(snapshot.child("userRoll").getValue(String.class));
 
                     Map<String, Map<String, Object>> scoresMap = new HashMap<>();
                     for (DataSnapshot scoreSnapshot : snapshot.child("scores").getChildren()) {

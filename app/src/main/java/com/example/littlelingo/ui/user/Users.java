@@ -12,11 +12,19 @@ public class Users {
     private String imageLink;
     private String dateOfBirth; // Format: YYYY-MM-DD
     private Map<String, Map<String, Object>> scores; // Change to Map<String, Map<String, Object>>
-
+    private String userRoll;
     // Default constructor required for calls to DataSnapshot.getValue(User.class)
     public Users() {
         // Initialize scores map to avoid null pointer exceptions
         scores = new HashMap<>();
+    }
+
+    public void setUserRoll(String userRoll) {
+        this.userRoll = userRoll;
+    }
+
+    public String getUserRoll() {
+        return userRoll;
     }
 
     // Constructor with parameters
@@ -29,6 +37,7 @@ public class Users {
         this.dateOfBirth = dateOfBirth;
         this.scores = new HashMap<>();
         this.imageLink = "";
+        this.userRoll = "user";
     }
 
     // Getters and setters

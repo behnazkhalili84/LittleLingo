@@ -16,11 +16,12 @@ import com.example.littlelingo.R;
 import com.example.littlelingo.SignInActivity;
 import com.example.littlelingo.databinding.FragmentHomeBinding;
 import com.example.littlelingo.ui.SharedViewModel;
+import com.example.littlelingo.ui.user.AuthViewModel;
 
 public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;
-    private SharedViewModel sharedViewModel;
+    private AuthViewModel authViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -31,18 +32,18 @@ public class HomeFragment extends Fragment {
         View root = binding.getRoot();
 
         // Access SharedViewModel
-        sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
+        authViewModel = new ViewModelProvider(requireActivity()).get(AuthViewModel.class);
 
         // Observe data from SharedViewModel
-        sharedViewModel.getName().observe(getViewLifecycleOwner(), name -> {
+        authViewModel.getUserLiveData().observe(getViewLifecycleOwner(), user -> {
            // Toast.makeText(getContext(), "Name: " + name, Toast.LENGTH_SHORT).show();
-            homeViewModel.setText("Welcome, " + name);
+            homeViewModel.setText("Welcome, " + user.getName());
         });
 
-        sharedViewModel.getUserID().observe(getViewLifecycleOwner(), userID -> {
-            // add code here
-           // Toast.makeText(getContext(), "UserID: " + userID, Toast.LENGTH_SHORT).show();
-        });
+//        sharedViewModel.getUserID().observe(getViewLifecycleOwner(), userID -> {
+//            // add code here
+//           // Toast.makeText(getContext(), "UserID: " + userID, Toast.LENGTH_SHORT).show();
+//        });
 
         // Navigation
         binding.grammarLayout.setOnClickListener(new View.OnClickListener() {

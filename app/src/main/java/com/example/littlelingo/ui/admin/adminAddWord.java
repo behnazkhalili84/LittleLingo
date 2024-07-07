@@ -9,11 +9,14 @@ import android.provider.MediaStore;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
 
 import com.example.littlelingo.R;
 import com.example.littlelingo.ui.learningvocabulary.Word;
@@ -26,6 +29,9 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+
+import androidx.core.view.WindowInsetsCompat;
+
 
 public class adminAddWord extends AppCompatActivity {
 
@@ -66,6 +72,18 @@ public class adminAddWord extends AppCompatActivity {
             // First, let the user pick a photo
             Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
             startActivityForResult(intent, REQUEST_CODE_PHOTO);
+        });
+
+        ScrollView scrollView = findViewById(R.id.scrollView);
+        EditText etExampleSentence = findViewById(R.id.et_exampleSentence);
+
+        ViewCompat.setOnApplyWindowInsetsListener(scrollView, (v, insets) -> {
+            Insets imeInsets = insets.getInsets(WindowInsetsCompat.Type.ime());
+            Insets systemBarsInsets = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+
+            int bottomInset = Math.max(imeInsets.bottom, systemBarsInsets.bottom);
+            v.setPadding(0, 0, 0, bottomInset);
+            return WindowInsetsCompat.CONSUMED;
         });
 
     }

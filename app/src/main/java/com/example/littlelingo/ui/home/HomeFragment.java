@@ -4,12 +4,15 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.littlelingo.R;
@@ -22,6 +25,9 @@ public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;
     private AuthViewModel authViewModel;
+
+    private ImageView adminimageView;
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -67,6 +73,20 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        adminimageView = root.findViewById(R.id.adminPage);
+        adminimageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NavHostFragment.findNavController(HomeFragment.this).navigate(R.id.nav_adminPage);
+            }
+        });
+
+//        public void onClick(View v {
+//            NavController navController = Navigation.findNavController(view);
+//                navController.navigate(R.id.adminPage);
+//        }
+//    };
+
 //        binding.grammarQuizLayout.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -77,7 +97,7 @@ public class HomeFragment extends Fragment {
 //        binding.awardLayout.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
-//                NavHostFragment.findNavController(HomeFragment.this).navigate(R.id.action_dashboardFragment_to_videoFragment);
+//                NavHostFragment.findNavController(HomeFragment.this).navigate(R.id.);
 //            }
 //        });
 

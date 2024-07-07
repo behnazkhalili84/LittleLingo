@@ -141,6 +141,13 @@
     <string name="alligator">Alligator</string>
     <string name="apple">Apple</string>
     <string name="ant">Ant</string>
+    <string name="enter_an_example_sentences">Enter an example sentences</string>
+    <string name="add_to_word_list">Add to word list</string>
+    <string name="photo_preview">Photo Preview</string>
+    <string name="upload_photo">Upload Photo</string>
+    <string name="enter_word_type">Enter Word Type</string>
+    <string name="enter_word_name">Enter Word Name</string>
+    <string name="enter_word_id">Enter Word Id</string>
 
     <string name="menu_profile">Profile</string>
     <string name="result_report">Result Report</string>

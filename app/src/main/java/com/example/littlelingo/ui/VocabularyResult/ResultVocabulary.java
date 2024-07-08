@@ -42,7 +42,7 @@ public class ResultVocabulary extends AppCompatActivity {
         tvUsername.setText("Username: " + username);
 
         // Initialize MailgunService
-        mailgunService = new MailgunService();
+        mailgunService = new MailgunService(username);
 
         // Send the quiz result via email using Mailgun
         sendEmail(username, score);

@@ -278,9 +278,8 @@ public class GrammarQuiz extends Fragment {
     private void navigateToResult() {
         storeScoreToDatabase(userId, currentScore);
         Intent intent = new Intent(getActivity(), ResultVocabulary.class);
-        mDatabase = FirebaseDatabase.getInstance().getReference("Results");
-        intent.putExtra("SCORE", currentScore); // Note the key "SCORE"
-//        intent.putExtra("USERNAME", username);// Pass the score to the result activity
+        intent.putExtra("SCORE", currentScore);
+        intent.putExtra("USERNAME", username);
         Log.d("GrammarQuiz", "Navigating to result with score: " + currentScore); // Debug log
         startActivity(intent);
         getActivity().finish();

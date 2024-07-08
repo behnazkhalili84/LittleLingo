@@ -1,6 +1,5 @@
 package com.example.littlelingo.API;
 
-
 import android.util.Log;
 
 import okhttp3.Credentials;
@@ -15,17 +14,22 @@ import java.io.IOException;
 public class MailgunService {
 
     private static final String TAG = "MailgunService";
-    private static final String API_KEY = "33d655e7ac6b29ceaa50a1b4d0c78579-623e10c8-1f41a326";
-    private static final String MAILGUN_DOMAIN = "sandboxad7e3b4966de4c938a90fb863061260a.mailgun.org";
+    private static final String API_KEY = "0dc316963c99ff98a22ac034ae181c66-8a084751-9c78795e";
+    private static final String MAILGUN_DOMAIN = "sandboxa0cfd9be8aca4567ba5aff1f7b6ceb21.mailgun.org";
     private static final String BASE_URL = "https://api.mailgun.net/v3/" + MAILGUN_DOMAIN + "/messages";
+    private String username;
 
     private final OkHttpClient client = new OkHttpClient();
+
+    public MailgunService(String username) {
+        this.username = username;
+    }
 
     public void sendSimpleMessage(String to, String subject, String text) throws IOException {
         String credential = Credentials.basic("api", API_KEY);
 
         RequestBody formBody = new FormBody.Builder()
-                .add("from", "Excited User <postmaster@" + MAILGUN_DOMAIN + ">")
+                .add("from", username + " <postmaster@" + MAILGUN_DOMAIN + ">")
                 .add("to", to)
                 .add("subject", subject)
                 .add("text", text)
@@ -50,8 +54,3 @@ public class MailgunService {
         }
     }
 }
-//old api
-//sandboxad7e3b4966de4c938a90fb863061260a.mailgun.org
-//33d655e7ac6b29ceaa50a1b4d0c78579-623e10c8-1f41a326
-//new key
-//98dda2cf55d65e1c3b2563e7691db22f-623e10c8-720a8c63

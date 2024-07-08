@@ -61,7 +61,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:padding="15dp"
-                android:textColorHint="#7A8089"
+                android:textColorHint="@color/black"
                 android:textSize="14sp"
                 tools:text="0/10" />
         </LinearLayout>
@@ -71,10 +71,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:background="@color/teal_200"
+            android:background="@color/secondaryColor"
             android:gravity="center"
             android:padding="15dp"
-            android:textColor="#7A8089"
+            android:textColor="@color/textColor"
             android:textSize="18sp"
             tools:text="Apple is a delicious fruit"
             android:textStyle="bold"/>
@@ -84,13 +84,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:backgroundTint="@color/teal_200"
-            android:textColor="@color/white"
+            android:backgroundTint="@color/secondaryColor"
+            android:textColor="@color/textColor"
             android:textSize="18sp"
             android:textStyle="bold"
             android:text="@string/play_audio"
             app:iconGravity="textEnd"
             app:icon="@drawable/baseline_play_circle_outline_24"
+            app:iconTint="@color/textColor"
             app:iconPadding="8dp"
             app:iconSize="24dp" />
 
@@ -106,9 +107,9 @@
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:background="@color/teal_700"
+                android:background="@color/secondaryColor"
                 android:text="@string/back"
-                android:textColor="@android:color/white"
+                android:textColor="@color/textColor"
                 android:textSize="18sp"
                 android:textStyle="bold" />
             <Space
@@ -121,9 +122,9 @@
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:background="@color/teal_700"
+                android:background="@color/secondaryColor"
                 android:text="@string/next"
-                android:textColor="@android:color/white"
+                android:textColor="@color/textColor"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 

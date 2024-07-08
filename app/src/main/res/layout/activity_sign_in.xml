@@ -76,6 +76,7 @@
             android:paddingVertical="10dp"
             style="@style/Widget.MyApp.RoundedButton"
             android:enabled="false"
+            android:textColor="@color/textColor"
             android:text="Sign In" />
 
         <com.google.android.material.button.MaterialButton
@@ -83,7 +84,7 @@
             style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/secondaryColor"
+            android:textColor="@color/secondaryColorForText"
             android:text="Forgot Password?" />
 
         <LinearLayout
@@ -106,7 +107,7 @@
                 style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/secondaryColor"
+                android:textColor="@color/secondaryColorForText"
                 android:text="Sign Up" />
         </LinearLayout>
     </LinearLayout>

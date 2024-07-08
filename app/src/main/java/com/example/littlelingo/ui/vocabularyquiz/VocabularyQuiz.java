@@ -276,7 +276,7 @@ public class VocabularyQuiz extends Fragment {
         Intent intent = new Intent(getActivity(), ResultVocabulary.class);
         mDatabase = FirebaseDatabase.getInstance().getReference("Results");
         intent.putExtra("SCORE", currentScore); // Note the key "SCORE"
-//        intent.putExtra("USERNAME", username);// Pass the score to the result activity
+        intent.putExtra("USERNAME", username);// Pass the score to the result activity
         Log.d("VocabularyQuiz", "Navigating to result with score: " + currentScore); // Debug log
         startActivity(intent);
         getActivity().finish();

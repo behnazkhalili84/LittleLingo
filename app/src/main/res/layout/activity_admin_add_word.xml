@@ -32,16 +32,27 @@
             android:textSize="22sp"
             tools:text="" />
 
-        <EditText
-            android:id="@+id/et_wordType"
+        <Spinner
+            android:id="@+id/wordTypeSpinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:gravity="center"
             android:textColor="#363A43"
-            android:hint="@string/enter_word_type"
+            android:hint="Select the word type"
             android:textSize="22sp"
-            tools:text="" />
+            android:spinnerMode="dropdown" />
+
+<!--        <EditText-->
+<!--            android:id="@+id/et_wordType"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_margin="10dp"-->
+<!--            android:gravity="center"-->
+<!--            android:textColor="#363A43"-->
+<!--            android:hint="@string/enter_word_type"-->
+<!--            android:textSize="22sp"-->
+<!--            tools:text="" />-->
 
 
 

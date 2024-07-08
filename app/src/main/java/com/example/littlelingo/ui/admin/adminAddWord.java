@@ -10,10 +10,12 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ScrollView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,6 +42,7 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Random;
 
 import androidx.core.view.WindowInsetsCompat;
@@ -47,18 +50,16 @@ import androidx.core.view.WindowInsetsCompat;
 
 public class adminAddWord extends AppCompatActivity {
 
-    private static final int REQUEST_CODE_PHOTO = 1;
-    private static final int REQUEST_CODE_AUDIO = 2;
-    private EditText editTextWordName,editTextExampleSentence,editTextWordType;
+//    private static final int REQUEST_CODE_PHOTO = 1;
+//    private static final int REQUEST_CODE_AUDIO = 2;
+    private EditText editTextWordName,editTextExampleSentence;
     private ImageView imageViewPhoto;
    private TextView textViewUploadAudio, tvAddImage;;
     private Button buttonAddWord;
+    private Spinner wordTypeSpinner;
 
   //  private Uri photoUri;
     private  Uri audioUri;
-    //DataSnapshot dataSnapshot;
-
-
     private DatabaseReference mDatabase;
     private AuthViewModel authViewModel;
     private StorageReference storageReference;
@@ -99,7 +100,7 @@ public class adminAddWord extends AppCompatActivity {
 
 
 
-    @SuppressLint("MissingInflatedId")
+    @SuppressLint({"MissingInflatedId", "RestrictedApi"})
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -107,12 +108,18 @@ public class adminAddWord extends AppCompatActivity {
         setContentView(R.layout.activity_admin_add_word);
 
         editTextWordName = findViewById(R.id.et_wordname);
-        editTextWordType = findViewById(R.id.et_wordType);
+//        editTextWordType = findViewById(R.id.et_wordType);
         editTextExampleSentence = findViewById(R.id.et_exampleSentence);
         imageViewPhoto = findViewById(R.id.iv_image);
         textViewUploadAudio = findViewById(R.id.tv_uploadAudio);
         tvAddImage = findViewById(R.id.tv_add_image);
         buttonAddWord = findViewById(R.id.btn_addWord);
+        wordTypeSpinner = findViewById(R.id.wordTypeSpinner);
+
+        String[] items = new String[]{"Select an option","Vocab" , "Grammar"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, items);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        wordTypeSpinner.setAdapter(adapter);
 
         mDatabase = FirebaseDatabase.getInstance().getReference("word");
         storageReference = FirebaseStorage.getInstance().getReference("uploads");
@@ -145,7 +152,7 @@ public class adminAddWord extends AppCompatActivity {
             // Check if the user has entered all required fields
             String wordName = editTextWordName.getText().toString().trim();
             String exampleSentence = editTextExampleSentence.getText().toString().trim();
-            String wordType = editTextWordType.getText().toString().trim();
+            String wordType = wordTypeSpinner.getSelectedItem().toString().trim();
 
             Log.d(TAG, "Word Name: " + wordName);
             Log.d(TAG, "Example Sentence: " + exampleSentence);
@@ -212,7 +219,7 @@ public class adminAddWord extends AppCompatActivity {
     private void clearFields() {
         editTextWordName.setText("");
         editTextExampleSentence.setText("");
-        editTextWordType.setText("");
+        wordTypeSpinner.setSelection(0);
         imageViewPhoto.setImageURI(null);
         tvAddImage.setVisibility(View.VISIBLE); // Show the "Add Image" text again
         textViewUploadAudio.setText("");

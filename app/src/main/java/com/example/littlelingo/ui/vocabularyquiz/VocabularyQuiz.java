@@ -29,6 +29,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import com.example.littlelingo.R;
+import com.example.littlelingo.SignInActivity;
 import com.example.littlelingo.ui.SharedViewModel;
 import com.example.littlelingo.ui.VocabularyResult.ResultVocabulary;
 import com.example.littlelingo.ui.quiz.Questions;
@@ -88,6 +89,10 @@ public class VocabularyQuiz extends Fragment {
             public void onChanged(String id) {
                 userId = id;
                 Log.d("VocabularyQuiz", "UserID from ViewModel: " + userId);
+                if (userId == null) {
+                    Toast.makeText(getContext(), "Please login again", Toast.LENGTH_SHORT).show();
+                    navigateToLogin();
+                }
             }
         });
         return view;
@@ -300,6 +305,12 @@ public class VocabularyQuiz extends Fragment {
 
         // Save the score details to the database under the generated key
         userScoresRef.child(scoreId).setValue(scoreDetails);
+    }
+
+    private void navigateToLogin() {
+        Intent intent = new Intent(getActivity(), SignInActivity.class);
+        startActivity(intent);
+        getActivity().finish();
     }
 
 }

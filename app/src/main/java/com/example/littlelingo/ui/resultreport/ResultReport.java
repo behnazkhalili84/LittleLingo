@@ -111,10 +111,23 @@ public class ResultReport extends Fragment {
         TextView correctAnswersTextView = view.findViewById(R.id.correctAnswersTextView);
         TextView dateOfQuizTextView = view.findViewById(R.id.dateOfQuizTextView);
 
-        quizTypeTextView.setText("Quiz Type: " + quizResult.get("quizType"));
-        totalQuestionsTextView.setText("Total Questions: " + quizResult.get("totalQuestions"));
+        String quizType = (String) quizResult.get("quizType");
+        quizTypeTextView.setText("Quiz Type: " + quizType);
+
+        // Determine total questions based on quiz type
+        int totalQuestions;
+        if ("Vocabulary Quiz".equals(quizType)) {
+            totalQuestions = 8;
+        } else if ("Grammar Quiz".equals(quizType)) {
+            totalQuestions = 5;
+        } else {
+            totalQuestions = 0; // Default value if quizType is unknown
+        }
+
+        totalQuestionsTextView.setText("Total Questions: " + totalQuestions);
         correctAnswersTextView.setText("Correct Answers: " + quizResult.get("score")); // Changed key to "score"
         dateOfQuizTextView.setText("Date: " + quizResult.get("date"));
+
         return view;
     }
 }

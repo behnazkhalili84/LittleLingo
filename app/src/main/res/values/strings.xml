@@ -153,4 +153,6 @@
     <string name="result_report">Result Report</string>
     <string name="admin">Admin Panel</string>
     <string name="menu_admin">Admin Panel</string>
+    <string name="back_to_home">Back to Home</string>
+    <string name="cancel">Cancel</string>
 </resources>

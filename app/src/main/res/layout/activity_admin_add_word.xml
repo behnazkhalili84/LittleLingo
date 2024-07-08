@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
-<!--    xmlns:tools="http://schemas.android.com/tools"-->
-<!--    android:layout_width="match_parent"-->
-<!--    android:layout_height="match_parent"-->
-<!--    tools:context=".ui.learningvocabulary.LearningVocabulary">-->
+    <!--<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--    xmlns:tools="http://schemas.android.com/tools"-->
+    <!--    android:layout_width="match_parent"-->
+    <!--    android:layout_height="match_parent"-->
+    <!--    tools:context=".ui.learningvocabulary.LearningVocabulary">-->
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
@@ -11,6 +11,7 @@
     android:layout_height="match_parent" xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".MainActivity"
     android:fillViewport="true"
+    android:background="@color/backgroundColor"
     android:id="@+id/scrollView">
 
     <LinearLayout
@@ -24,13 +25,14 @@
         <EditText
             android:id="@+id/et_wordname"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="47dp"
             android:layout_margin="10dp"
             android:gravity="center"
             android:textColor="@color/textColor"
-            android:background="@color/primaryColor"
+            android:background="@color/secondaryColor"
             android:hint="@string/enter_word_name"
-            android:textSize="22sp"
+            android:textSize="18sp"
+            android:textStyle="bold"
             tools:text="" />
 
         <Spinner
@@ -75,7 +77,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:background="@color/primaryColor"
+            android:background="@color/secondaryColor"
             android:gravity="center"
             android:padding="15dp"
             android:textColor="@color/textColor"
@@ -89,7 +91,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:background="@color/primaryColor"
+            android:background="@color/secondaryColor"
             android:gravity="center"
             android:padding="15dp"
             android:textColor="@color/textColor"
@@ -97,17 +99,39 @@
             android:hint="Choose an audio"
             tools:text=""
             android:textStyle="bold"/>
+        <LinearLayout
+            android:layout_marginTop="70dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_cancel"
+            android:layout_width="110dp"
+            android:layout_height="40dp"
+            android:background="@color/primaryColor"
+            android:text="@string/cancel"
+            android:textColor="@color/textColor"
+            android:textSize="16dp" />
+
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
 
 
         <Button
             android:id="@+id/btn_addWord"
-            android:layout_width="170dp"
-            android:layout_height="40dp"
-            android:text="Add to list"
+            android:layout_width="110dp"
+            android:layout_height="50dp"
+            android:text="Add"
             android:textColor="@color/textColor"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="20dp"/>
+            android:layout_marginBottom="16dp"
+            />
 
+        </LinearLayout>
 
     </LinearLayout>
 </ScrollView>

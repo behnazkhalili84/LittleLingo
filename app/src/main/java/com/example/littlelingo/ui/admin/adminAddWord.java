@@ -30,6 +30,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 
 import com.example.littlelingo.R;
+import com.example.littlelingo.ui.home.HomeFragment;
 import com.example.littlelingo.ui.learningvocabulary.Word;
 import com.example.littlelingo.ui.user.AuthViewModel;
 import com.example.littlelingo.ui.user.Users;
@@ -46,6 +47,9 @@ import java.util.Arrays;
 import java.util.Random;
 
 import androidx.core.view.WindowInsetsCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 
 public class adminAddWord extends AppCompatActivity {
@@ -55,7 +59,7 @@ public class adminAddWord extends AppCompatActivity {
     private EditText editTextWordName,editTextExampleSentence;
     private ImageView imageViewPhoto;
    private TextView textViewUploadAudio, tvAddImage;;
-    private Button buttonAddWord;
+    private Button buttonAddWord,buttonCancel;
     private Spinner wordTypeSpinner;
 
   //  private Uri photoUri;
@@ -114,6 +118,7 @@ public class adminAddWord extends AppCompatActivity {
         textViewUploadAudio = findViewById(R.id.tv_uploadAudio);
         tvAddImage = findViewById(R.id.tv_add_image);
         buttonAddWord = findViewById(R.id.btn_addWord);
+        buttonCancel= findViewById(R.id.btn_cancel);
         wordTypeSpinner = findViewById(R.id.wordTypeSpinner);
 
         String[] items = new String[]{"Select an option","Vocab" , "Grammar"};
@@ -166,6 +171,14 @@ public class adminAddWord extends AppCompatActivity {
             }
 
             saveWordToFirebase(wordName, exampleSentence, wordType);
+        });
+
+        buttonCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Navigate to HomeFragment
+                finish();
+            }
         });
 
 
@@ -233,49 +246,7 @@ public class adminAddWord extends AppCompatActivity {
         String path = MediaStore.Images.Media.insertImage(this.getContentResolver(), bitmap, "ProfileImage", null);
         return Uri.parse(path);
     }
-//    private void saveImageToFirebaseStorage(Uri imageUri, Users user) {
-//        StorageReference storageRef = FirebaseStorage.getInstance().getReference();
-//        StorageReference profileImageRef = storageRef.child("wordsImages/" + user.getUserId() + ".jpg");
-//
-//        profileImageRef.putFile(imageUri).addOnSuccessListener(taskSnapshot -> {
-//            profileImageRef.getDownloadUrl().addOnSuccessListener(uri -> {
-//                user.setImageLink(uri.toString());
-//                authViewModel.updateUser(user);
-//            });
-//        }).addOnFailureListener(e -> {
-//            Log.e(TAG, "Failed to upload image to Firebase Storage", e);
-//        });
-//    }
 
-//    protected void onActivityResult(int requestCode, int resultCode, @NonNull Intent data) {
-//    super.onActivityResult(requestCode, resultCode, data);
-//
-//    if (resultCode == RESULT_OK && data != null) {
-//        Uri selectedUri = data.getData();
-//        if (requestCode == REQUEST_CODE_PHOTO) {
-//            photoUri = selectedUri;
-//
-//
-//            try {
-//                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), photoUri);
-//                imageViewPhoto.setImageBitmap(bitmap);
-//
-//                // Now let the user pick an audio file
-//                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Audio.Media.EXTERNAL_CONTENT_URI);
-//                startActivityForResult(intent, REQUEST_CODE_AUDIO);
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//
-//        } else if (requestCode == REQUEST_CODE_AUDIO) {
-//            audioUri = selectedUri;
-//            textViewUploadAudio.setText(selectedUri.getPath());
-//
-//            uploadWordToFirebase();
-//        }
-//    }
-//}
-//
 //    private void uploadWordToFirebase() {
 //        String wordName = editTextWordName.getText().toString().trim();
 //        String exampleSentence = editTextExampleSentence.getText().toString().trim();

@@ -144,32 +144,6 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/awardLayout"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_columnWeight="1"
-                    android:layout_margin="8dp"
-                    android:background="@android:color/holo_orange_light"
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    android:padding="16dp"
-                    android:layout_rowSpan="2"
-                    android:layout_columnSpan="2">
-
-                    <ImageView
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
-                        android:src="@drawable/videoplayer" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:text="@string/videos"
-                        android:textColor="@android:color/white"
-                        android:textSize="16sp" />
-                </LinearLayout>
-                <LinearLayout
                     android:id="@+id/adminLayout"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"

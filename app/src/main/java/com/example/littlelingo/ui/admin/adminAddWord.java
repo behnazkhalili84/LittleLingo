@@ -1,17 +1,21 @@
 package com.example.littlelingo.ui.admin;
 
+import static androidx.fragment.app.FragmentManager.TAG;
+
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResultCallback;
@@ -25,6 +29,8 @@ import androidx.core.view.ViewCompat;
 
 import com.example.littlelingo.R;
 import com.example.littlelingo.ui.learningvocabulary.Word;
+import com.example.littlelingo.ui.user.AuthViewModel;
+import com.example.littlelingo.ui.user.Users;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -34,6 +40,7 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Random;
 
 import androidx.core.view.WindowInsetsCompat;
 
@@ -47,12 +54,13 @@ public class adminAddWord extends AppCompatActivity {
    private TextView textViewUploadAudio, tvAddImage;;
     private Button buttonAddWord;
 
-    private Uri photoUri;
+  //  private Uri photoUri;
     private  Uri audioUri;
-    DataSnapshot dataSnapshot;
+    //DataSnapshot dataSnapshot;
 
 
     private DatabaseReference mDatabase;
+    private AuthViewModel authViewModel;
     private StorageReference storageReference;
 
     private Uri imageUri;
@@ -73,8 +81,18 @@ public class adminAddWord extends AppCompatActivity {
         public void onActivityResult(Bitmap bitmap) {
             if (bitmap != null) {
                 imageViewPhoto.setImageBitmap(bitmap);
-               // imageUri = getImageUriFromBitmap(bitmap);
+                imageUri = getImageUriFromBitmap(bitmap);
                 tvAddImage.setVisibility(View.GONE); // Hide the "Add Image" text
+            }
+        }
+    });
+
+    private final ActivityResultLauncher<String> getAudioContent = registerForActivityResult(new ActivityResultContracts.GetContent(), new ActivityResultCallback<Uri>() {
+        @Override
+        public void onActivityResult(Uri uri) {
+            if (uri != null) {
+                audioUri = uri;
+                textViewUploadAudio.setText(uri.getPath());
             }
         }
     });
@@ -96,7 +114,7 @@ public class adminAddWord extends AppCompatActivity {
         tvAddImage = findViewById(R.id.tv_add_image);
         buttonAddWord = findViewById(R.id.btn_addWord);
 
-        mDatabase = FirebaseDatabase.getInstance().getReference("words");
+        mDatabase = FirebaseDatabase.getInstance().getReference("word");
         storageReference = FirebaseStorage.getInstance().getReference("uploads");
 
         imageViewPhoto.setOnClickListener(new View.OnClickListener() {
@@ -121,11 +139,34 @@ public class adminAddWord extends AppCompatActivity {
             }
         });
 
+        textViewUploadAudio.setOnClickListener(v -> getAudioContent.launch("audio/*"));
+
         buttonAddWord.setOnClickListener(view -> {
-            // First, let the user pick a photo
-            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-            startActivityForResult(intent, REQUEST_CODE_PHOTO);
+            // Check if the user has entered all required fields
+            String wordName = editTextWordName.getText().toString().trim();
+            String exampleSentence = editTextExampleSentence.getText().toString().trim();
+            String wordType = editTextWordType.getText().toString().trim();
+
+            Log.d(TAG, "Word Name: " + wordName);
+            Log.d(TAG, "Example Sentence: " + exampleSentence);
+            Log.d(TAG, "Word Type: " + wordType);
+            Log.d(TAG, "Image URI: " + imageUri);
+            Log.d(TAG, "Audio URI: " + audioUri);
+
+            if (wordName.isEmpty() || exampleSentence.isEmpty() || wordType.isEmpty() || imageUri == null || audioUri == null) {
+                Toast.makeText(this, "Please fill all fields and add both image and audio.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            saveWordToFirebase(wordName, exampleSentence, wordType);
         });
+
+
+//        buttonAddWord.setOnClickListener(view -> {
+//            // First, let the user pick a photo
+//            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+//            startActivityForResult(intent, REQUEST_CODE_PHOTO);
+//        });
 
         ScrollView scrollView = findViewById(R.id.scrollView);
         EditText etExampleSentence = findViewById(R.id.et_exampleSentence);
@@ -140,6 +181,64 @@ public class adminAddWord extends AppCompatActivity {
         });
 
     }
+
+    private void saveWordToFirebase(String wordName, String exampleSentence, String wordType) {
+        Random random = new Random();
+        int randomNumber = random.nextInt(100000); // Generates a random number between 0 and 99999
+
+        StorageReference photoRef = storageReference.child("wordPhotos/" + wordName + randomNumber + ".jpg");
+        StorageReference audioRef = storageReference.child("wordAudio/" + wordName + randomNumber + ".mp3");
+
+        photoRef.putFile(imageUri).addOnSuccessListener(taskSnapshot -> photoRef.getDownloadUrl().addOnSuccessListener(photoDownloadUrl -> {
+            audioRef.putFile(audioUri).addOnSuccessListener(taskSnapshot1 -> audioRef.getDownloadUrl().addOnSuccessListener(audioDownloadUrl -> {
+                String wordId = mDatabase.push().getKey();
+                Word word = new Word(wordId, wordName, wordType, exampleSentence, photoDownloadUrl.toString(), audioDownloadUrl.toString(), "", "", "");
+                mDatabase.child(wordId).setValue(word).addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Toast.makeText(adminAddWord.this, "Word added successfully", Toast.LENGTH_SHORT).show();
+                        clearFields();
+                    } else {
+                        Toast.makeText(adminAddWord.this, "Failed to add word", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            })).addOnFailureListener(e -> {
+                Toast.makeText(adminAddWord.this, "Failed to upload audio", Toast.LENGTH_SHORT).show();
+            });
+        })).addOnFailureListener(e -> {
+            Toast.makeText(adminAddWord.this, "Failed to upload image", Toast.LENGTH_SHORT).show();
+        });
+    }
+
+    private void clearFields() {
+        editTextWordName.setText("");
+        editTextExampleSentence.setText("");
+        editTextWordType.setText("");
+        imageViewPhoto.setImageURI(null);
+        tvAddImage.setVisibility(View.VISIBLE); // Show the "Add Image" text again
+        textViewUploadAudio.setText("");
+        imageUri = null;
+        audioUri = null;
+    }
+
+    private Uri getImageUriFromBitmap(Bitmap bitmap) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(this.getContentResolver(), bitmap, "ProfileImage", null);
+        return Uri.parse(path);
+    }
+//    private void saveImageToFirebaseStorage(Uri imageUri, Users user) {
+//        StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+//        StorageReference profileImageRef = storageRef.child("wordsImages/" + user.getUserId() + ".jpg");
+//
+//        profileImageRef.putFile(imageUri).addOnSuccessListener(taskSnapshot -> {
+//            profileImageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+//                user.setImageLink(uri.toString());
+//                authViewModel.updateUser(user);
+//            });
+//        }).addOnFailureListener(e -> {
+//            Log.e(TAG, "Failed to upload image to Firebase Storage", e);
+//        });
+//    }
 
 //    protected void onActivityResult(int requestCode, int resultCode, @NonNull Intent data) {
 //    super.onActivityResult(requestCode, resultCode, data);

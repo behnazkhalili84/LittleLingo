@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.littlelingo.R;
+import com.example.littlelingo.SignInActivity;
 import com.example.littlelingo.ui.SharedViewModel;
 import com.example.littlelingo.ui.VocabularyResult.ResultVocabulary;
 import com.example.littlelingo.ui.quiz.Questions;
@@ -74,7 +75,7 @@ public class GrammarQuiz extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_grammar_quiz, container, false);
+        View view = inflater.inflate(R.layout.fragment_vocabulary_quiz, container, false);
         setupUI(view);
         setupListeners();
         // Initialize SharedViewModel
@@ -84,14 +85,18 @@ public class GrammarQuiz extends Fragment {
             @Override
             public void onChanged(String name) {
                 username = name;
-                Log.d("GrammarQuiz", "Username from ViewModel: " + username);
+                Log.d("VocabularyQuiz", "Username from ViewModel: " + username);
             }
         });
         sharedViewModel.getUserID().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(String id) {
                 userId = id;
-                Log.d("GrammarQuiz", "UserID from ViewModel: " + userId);
+                Log.d("VocabularyQuiz", "UserID from ViewModel: " + userId);
+                if (userId == null) {
+                    Toast.makeText(getContext(), "Please login again", Toast.LENGTH_SHORT).show();
+                    navigateToLogin();
+                }
             }
         });
         return view;
@@ -303,6 +308,11 @@ public class GrammarQuiz extends Fragment {
 
         // Save the score details to the database under the generated key
         userScoresRef.child(scoreId).setValue(scoreDetails);
+    }
+    private void navigateToLogin() {
+        Intent intent = new Intent(getActivity(), SignInActivity.class);
+        startActivity(intent);
+        getActivity().finish();
     }
 
 }

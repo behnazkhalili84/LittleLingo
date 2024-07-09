@@ -14,8 +14,8 @@ import java.io.IOException;
 public class MailgunService {
 
     private static final String TAG = "MailgunService";
-    private static final String API_KEY = "0dc316963c99ff98a22ac034ae181c66-8a084751-9c78795e";
-    private static final String MAILGUN_DOMAIN = "sandboxa0cfd9be8aca4567ba5aff1f7b6ceb21.mailgun.org";
+    private static final String API_KEY = "secure-api-key";
+    private static final String MAILGUN_DOMAIN = "sandbox.mailgun.org";
     private static final String BASE_URL = "https://api.mailgun.net/v3/" + MAILGUN_DOMAIN + "/messages";
     private String username;
 

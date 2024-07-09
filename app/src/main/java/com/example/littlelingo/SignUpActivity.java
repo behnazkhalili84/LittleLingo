@@ -110,20 +110,7 @@ public class SignUpActivity extends AppCompatActivity {
             }
         });
 
-//        authViewModel.getUserLiveData().observe(this, user -> {
-//            if(user != null){
-//                Toast.makeText(SignUpActivity.this,"Sign Up Successful", Toast.LENGTH_SHORT).show();
-//                Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
-//                intent.putExtra("name",user.getName());
-//                intent.putExtra("userID",user.getUserId());
-//                //Toast.makeText(SignUpActivity.this,"SignUp intent: "+ intent.getStringExtra("name"), Toast.LENGTH_SHORT).show();
-//
-//                startActivity(intent);
-//                finish();
-//            } else {
-//                Toast.makeText(SignUpActivity.this,"Sign Up Fails: "+ authViewModel.authError, Toast.LENGTH_SHORT).show();
-//            }
-//        });
+
 
 
                 ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {

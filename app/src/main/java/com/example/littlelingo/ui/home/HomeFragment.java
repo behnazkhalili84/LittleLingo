@@ -79,6 +79,14 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        binding.grammarQuizLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NavHostFragment.findNavController(HomeFragment.this).navigate(R.id.nav_grammarquiz);
+            }
+        });
+
+
         binding.adminLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -96,8 +96,8 @@ public class SignInActivity extends AppCompatActivity {
                     if(user != null){
                         Toast.makeText(SignInActivity.this,"Sign In Successful", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(SignInActivity.this, MainActivity.class);
-                        intent.putExtra("name",user.getName());
-                        intent.putExtra("userID",user.getUserId());
+//                        intent.putExtra("name",user.getName());
+//                        intent.putExtra("userID",user.getUserId());
                         //Toast.makeText(SignInActivity.this,"Sign In Intent: "+ intent.getStringExtra("name"), Toast.LENGTH_SHORT).show();
 
                         startActivity(intent);

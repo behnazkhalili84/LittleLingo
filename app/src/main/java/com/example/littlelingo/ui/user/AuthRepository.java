@@ -20,8 +20,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+// AuthRepository implementing Singleton pattern design
 public class AuthRepository {
+    private static AuthRepository instance;
     private FirebaseAuth firebaseAuth;
     private DatabaseReference databaseReference;
     private MutableLiveData<Users> userLiveData;
@@ -42,12 +43,21 @@ public class AuthRepository {
         }
     }
 
+    // Singleton instance method
+    public static synchronized AuthRepository getInstance() {
+        if (instance == null) {
+            instance = new AuthRepository();
+        }
+        return instance;
+    }
+
     public  void login(String email, String password){
         firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener( task->{
            if(task.isSuccessful()) {
                fetchUserData(firebaseAuth.getCurrentUser().getUid());
            } else {
                userLiveData.postValue(null);
+
            }
 
         });

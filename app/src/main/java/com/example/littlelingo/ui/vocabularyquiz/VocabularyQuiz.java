@@ -33,6 +33,7 @@ import com.example.littlelingo.SignInActivity;
 import com.example.littlelingo.ui.SharedViewModel;
 import com.example.littlelingo.ui.VocabularyResult.ResultVocabulary;
 import com.example.littlelingo.ui.quiz.Questions;
+import com.example.littlelingo.ui.user.AuthViewModel;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -50,7 +51,7 @@ public class VocabularyQuiz extends Fragment {
     MaterialButton btnSubmit;
 
     private DatabaseReference mDatabase;
-    private SharedViewModel sharedViewModel;
+    private AuthViewModel authViewModel;
     private List<Questions> questionsList = new ArrayList<>();
     private Set<String> askedQuestionIds = new HashSet<>();
     private int currentQuestionIndex = 0;
@@ -74,27 +75,25 @@ public class VocabularyQuiz extends Fragment {
         View view = inflater.inflate(R.layout.fragment_vocabulary_quiz, container, false);
         setupUI(view);
         setupListeners();
-        // Initialize SharedViewModel
-        sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
-        // Observe SharedViewModel data
-        sharedViewModel.getName().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(String name) {
-                username = name;
-                Log.d("VocabularyQuiz", "Username from ViewModel: " + username);
-            }
+        // Access AuthViewModel
+        authViewModel = new ViewModelProvider(requireActivity()).get(AuthViewModel.class);
+
+        // Observe data from AuthViewModel
+        authViewModel.getUserLiveData().observe(getViewLifecycleOwner(), user -> {
+            Toast.makeText(getContext(), "Name: " + user.getName(), Toast.LENGTH_SHORT).show();
+            // you can user the variable name here
         });
-        sharedViewModel.getUserID().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(String id) {
-                userId = id;
-                Log.d("VocabularyQuiz", "UserID from ViewModel: " + userId);
-                if (userId == null) {
-                    Toast.makeText(getContext(), "Please login again", Toast.LENGTH_SHORT).show();
-                    navigateToLogin();
-                }
-            }
-        });
+//        sharedViewModel.getUserID().observe(getViewLifecycleOwner(), new Observer<String>() {
+//            @Override
+//            public void onChanged(String id) {
+//                userId = id;
+//                Log.d("VocabularyQuiz", "UserID from ViewModel: " + userId);
+//                if (userId == null) {
+//                    Toast.makeText(getContext(), "Please login again", Toast.LENGTH_SHORT).show();
+//                    navigateToLogin();
+//                }
+//            }
+//        });
         return view;
     }
     @SuppressLint("WrongViewCast")

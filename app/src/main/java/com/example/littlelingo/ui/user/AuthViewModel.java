@@ -25,7 +25,7 @@ public class AuthViewModel extends ViewModel {
 
     //Constructor
     public AuthViewModel(){
-        authRepository = new AuthRepository();
+        authRepository = AuthRepository.getInstance();
         userLiveData = authRepository.getUserLiveData();
         loggedoutLiveData = authRepository.getLoggedOutLiveData();
         authError = authRepository.getAuthError();

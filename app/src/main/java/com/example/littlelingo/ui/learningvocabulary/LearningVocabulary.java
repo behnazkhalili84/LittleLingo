@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import com.example.littlelingo.R;
 import com.example.littlelingo.ui.SharedViewModel;
+import com.example.littlelingo.ui.user.AuthViewModel;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -37,7 +38,7 @@ public class LearningVocabulary extends Fragment {
     private static final String TAG = "LearningVocabularyViewModel";
     private VocabularyViewModel viewModel;
     private ViewModelProvider.Factory viewModelFactory;
-    private SharedViewModel sharedViewModel;
+    private AuthViewModel authViewModel;
 
     private DatabaseReference mDatabase;
 
@@ -74,12 +75,12 @@ public class LearningVocabulary extends Fragment {
 
        View view =  inflater.inflate(R.layout.fragment_learning_vocabulary, container, false);
 
-        // Access SharedViewModel
-        sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
+        // Access AuthViewModel
+        authViewModel = new ViewModelProvider(requireActivity()).get(AuthViewModel.class);
 
-        // Observe data from SharedViewModel
-        sharedViewModel.getName().observe(getViewLifecycleOwner(), name -> {
-            Toast.makeText(getContext(), "Name: " + name, Toast.LENGTH_SHORT).show();
+        // Observe data from AuthViewModel
+        authViewModel.getUserLiveData().observe(getViewLifecycleOwner(), user -> {
+            Toast.makeText(getContext(), "Name: " + user.getName(), Toast.LENGTH_SHORT).show();
             // you can user the variable name here
         });
 

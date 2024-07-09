@@ -80,6 +80,8 @@ public class VocabularyQuiz extends Fragment {
 
         // Observe data from AuthViewModel
         authViewModel.getUserLiveData().observe(getViewLifecycleOwner(), user -> {
+            userId = user.getUserId();
+            username = user.getName();
             Toast.makeText(getContext(), "Name: " + user.getName(), Toast.LENGTH_SHORT).show();
             // you can user the variable name here
         });
